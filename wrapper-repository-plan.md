@@ -28,22 +28,16 @@ This document captures the approach for a **wrapper repository** that uses [rh-a
 
 ```
 .
-├── README.md                 # Entry point: purpose, upstream link, Zammad focus
+├── README.md
 ├── docs/
-│   ├── zammad/
-│   │   ├── README.md
-│   │   ├── prerequisites.md
-│   │   ├── install-openshift.md
-│   │   ├── configure-channel.md
-│   │   ├── troubleshooting.md
-│   │   └── images/
-│   └── upstream.md           # Submodule workflow, bump process, compatibility matrix
-├── examples/
-│   └── values-zammad.yaml      # Overrides; not a fork of upstream chart
-├── scripts/                    # Optional: invoke upstream helm/ansible with Zammad vars
+│   ├── README.md
+│   ├── zammad/                 # Zammad layer (see docs in this folder)
+│   └── upstream.md
 ├── .gitmodules
 └── it-self-service-agent/      # Submodule → rh-ai-quickstart/it-self-service-agent @ pinned SHA
 ```
+
+Optional later: **`examples/`**, **`scripts/`** — thin overrides or wrappers around upstream Helm/Ansible only if needed.
 
 **Principles**
 
@@ -69,6 +63,8 @@ This document captures the approach for a **wrapper repository** that uses [rh-a
 1. Map which upstream components apply to the ticketing channel (e.g. dispatcher, helm, ansible, agent services); note ServiceNow-specific vs generic pieces.
 2. Author Zammad-specific docs: flows, secrets, Routes, alignment with upstream configuration.
 3. Add troubleshooting and minimal smoke tests (e.g. synthetic ticket → observable agent behavior).
+
+**Status:** See [docs/zammad/README.md](docs/zammad/README.md) and [docs/README.md](docs/README.md). Pages **link** into **`it-self-service-agent/`** for canonical procedures (Makefile, Helm); the wrapper avoids duplicating long install guides. Submodule pin: [docs/upstream.md](docs/upstream.md).
 
 ### Phase 3 — Automation and maintenance
 
