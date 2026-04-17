@@ -1,8 +1,14 @@
-# [INSERT quickstart title here]
+# Ticket resolution agent (Zammad wrapper)
 
-<!-- CONTRIBUTOR TODO: update title ^^
+This repository documents and deploys a **Zammad-oriented** ticketing flow on top of [it-self-service-agent](https://github.com/rh-ai-quickstart/it-self-service-agent), which is included as a Git submodule at **`it-self-service-agent/`** (pinned commit). For clone instructions, submodule bumps, and the compatibility table, see **[docs/upstream.md](docs/upstream.md)** and **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
-*replace the H1 title above with your quickstart title*
+The sections below retain the Red Hat AI quickstart template for the Helm chart under `chart/`; fill them in as the quickstart is finalized.
+
+---
+
+<!-- CONTRIBUTOR TODO: adjust quickstart title for publication if needed ^^
+
+*Title is set above; tune for Red Hat AI quickstart listing if required*
 
 TITLE requirements:
 	* MAX CHAR: 64
@@ -237,8 +243,8 @@ helm uninstall my-quickstart --namespace ${PROJECT}
 │   └── templates/            # Kubernetes resource templates
 │       ├── test-model-access.yaml  # Helm test for verifying model connectivity
 │       └── ...               # Add your templates here (deployments, services, etc.)
-├── docs/
-│   └── images/               # Architecture diagrams and screenshots
+├── docs/                     # Submodule workflow: docs/upstream.md
+├── it-self-service-agent/    # Git submodule (upstream app; pinned commit)
 └── README.md
 ```
 
