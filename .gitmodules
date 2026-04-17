@@ -1,0 +1,4 @@
+[submodule "it-self-service-agent"]
+	path = it-self-service-agent
+	url = https://github.com/rh-ai-quickstart/it-self-service-agent.git
+	branch = dev
