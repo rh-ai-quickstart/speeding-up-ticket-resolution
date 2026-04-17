@@ -14,3 +14,9 @@
 - **Zammad:** **[docs/zammad/README.md](docs/zammad/README.md)** — thin layer; **canonical** procedures live under **`it-self-service-agent/`** (`Makefile`, `helm/`, `guides/`). Add long generic content upstream via PR when possible; here, update links and short deltas when you bump the submodule.
 
 For the overall wrapper plan, see [wrapper-repository-plan.md](wrapper-repository-plan.md).
+
+## Automation
+
+- **CI** (`.github/workflows/ci.yml`): confirms recursive submodule checkout and basic repo integrity; Markdown link job is **non-blocking** (`continue-on-error`).
+- **Dependabot** (`.github/dependabot.yml`): may propose submodule bumps weekly. Merge only after validating upstream and updating [docs/upstream.md](docs/upstream.md).
+- **Version tags:** see [docs/releases.md](docs/releases.md).

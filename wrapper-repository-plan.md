@@ -72,6 +72,8 @@ Optional later: **`examples/`**, **`scripts/`** — thin overrides or wrappers a
 2. Optional: Dependabot/Renovate for submodule update PRs.
 3. **Tags**: e.g. `v2026.04.1` with changelog “tested with upstream SHA …”.
 
+**Status:** [.github/workflows/ci.yml](.github/workflows/ci.yml) verifies submodule checkout; [.markdown-link-check.json](.markdown-link-check.json) + non-blocking link job; [README.md](README.md) points to [docs/upstream.md#current-pin](docs/upstream.md#current-pin) for pin audit; [.github/dependabot.yml](.github/dependabot.yml) weekly submodule updates; [docs/releases.md](docs/releases.md) for tagging.
+
 ### Phase 4 — Glue (only if needed)
 
 1. Add `examples/` and `scripts/` that **call** upstream Helm/Ansible with documented values—still no fork.
