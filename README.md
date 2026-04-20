@@ -23,16 +23,17 @@ Submodule workflow and compatibility: **[docs/upstream.md](docs/upstream.md)** �
 | Submodule bumps / pins | [docs/upstream.md](docs/upstream.md) |
 | Zammad channel (thin layer; links into submodule) | [docs/zammad/README.md](docs/zammad/README.md) |
 | Tags and release notes (submodule SHA) | [docs/releases.md](docs/releases.md) |
+| Glue (Make/scripts) and maintainer checklist | [docs/glue.md](docs/glue.md) |
 
 ## Deploy
 
-Install and upgrade paths use **`make`** and Helm **inside** the submodule (for example **`make helm-install-ticketing`**). Start at **[docs/zammad/install-openshift.md](docs/zammad/install-openshift.md)** and follow upstream **`it-self-service-agent/Makefile`** as the source of truth.
+From the **repository root**, you can delegate to upstream with **`make install NAMESPACE=…`** (see root **`Makefile`**) or run **`make helm-install-ticketing`** inside **`it-self-service-agent/`** as today. Install and upgrade paths ultimately use **`make`** and Helm **inside** the submodule. Start at **[docs/zammad/install-openshift.md](docs/zammad/install-openshift.md)** and treat upstream **`it-self-service-agent/Makefile`** as the source of truth.
 
 There is **no** Helm chart published from the root of this repository.
 
 ## Maintenance & CI
 
-- **CI** runs on pushes and pull requests to **`main`** and **`dev`**: verifies **`it-self-service-agent`** checks out as a submodule (see [.github/workflows/ci.yml](.github/workflows/ci.yml)). A non-blocking job checks Markdown links.
+- **CI** runs on pushes and pull requests to **`main`** and **`dev`**: verifies **`it-self-service-agent`** checks out as a submodule (see [.github/workflows/ci.yml](.github/workflows/ci.yml)). A non-blocking job runs **`make check-links`** (same as locally).
 - **Dependabot** can open weekly PRs for the submodule (see [.github/dependabot.yml](.github/dependabot.yml)); review against upstream release notes before merging.
 - **Tags / releases:** see **[docs/releases.md](docs/releases.md)**.
 
@@ -40,17 +41,20 @@ There is **no** Helm chart published from the root of this repository.
 
 ```
 .
+├── Makefile                # Delegates ticketing targets to it-self-service-agent/Makefile
 ├── .github/
 │   ├── dependabot.yml      # Weekly submodule update PRs (optional review)
 │   └── workflows/ci.yml    # Submodule presence + Markdown link check
 ├── docs/
 │   ├── README.md           # Documentation split (wrapper vs submodule)
+│   ├── glue.md             # Glue + maintainer checklist
 │   ├── upstream.md         # Submodule clone, bump, compatibility matrix
 │   ├── releases.md         # Tagging notes
 │   └── zammad/             # Zammad ticketing notes (links upstream)
+├── examples/               # Placeholder notes (no secrets)
+├── scripts/                # Optional wrappers → root Makefile
 ├── it-self-service-agent/  # Git submodule — app, Helm charts, Makefile
 ├── CONTRIBUTING.md
-├── wrapper-repository-plan.md
 └── README.md
 ```
 

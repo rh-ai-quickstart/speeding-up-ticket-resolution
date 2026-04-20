@@ -5,17 +5,24 @@
 ## Before you start
 
 1. Clone this repo **with submodules**: [docs/upstream.md](../../docs/upstream.md).
-2. Work from **`it-self-service-agent/`** at the pinned commit (same doc).
-3. Set **`NAMESPACE`** for every upstream `make` target that requires it (upstream errors if unset).
+2. Stay at the **repository root**, or **`cd it-self-service-agent`**—either way you must be on the **pinned** submodule commit (same doc).
+3. Set **`NAMESPACE`** for every ticketing `make` target (upstream errors if unset).
 
 ```bash
-cd it-self-service-agent
 export NAMESPACE=my-ticketing-demo
+# Optional if you prefer working inside the submodule:
+# cd it-self-service-agent
 ```
 
 ## Primary install path
 
-Run upstream **one-shot ticketing** install:
+**Option A — from this repo’s root** (delegates to the same upstream target):
+
+```bash
+make install NAMESPACE="${NAMESPACE}"
+```
+
+**Option B — inside the submodule** (equivalent):
 
 ```bash
 make helm-install-ticketing NAMESPACE="${NAMESPACE}"
@@ -35,4 +42,4 @@ If you do not use the one-shot target, you must still satisfy the same ordering 
 
 ## Uninstall
 
-Use upstream **`make helm-uninstall`** (same `NAMESPACE`); it tears down the main release and Zammad-related resources per the Makefile. Confirm data retention policy before running.
+From repo root: **`make uninstall NAMESPACE="${NAMESPACE}"`**, or inside **`it-self-service-agent/`**: **`make helm-uninstall NAMESPACE="${NAMESPACE}"`**. Either tears down the main release and Zammad-related resources per the Makefile. Confirm data retention policy before running.

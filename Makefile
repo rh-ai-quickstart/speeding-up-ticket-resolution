@@ -1,0 +1,35 @@
+# Thin wrapper Makefile — delegates to it-self-service-agent (upstream source of truth).
+SUBMODULE := it-self-service-agent
+MARKDOWN_LINK_CHECK_VERSION ?= 3.10.3
+
+.PHONY: help
+help:
+	@echo "ticket-resolution-agent — delegates to $(SUBMODULE)/Makefile"
+	@echo ""
+	@echo "From repo root (Zammad ticketing profile):"
+	@echo "  make install NAMESPACE=<ns>     upstream: helm-install-ticketing"
+	@echo "  make uninstall NAMESPACE=<ns>   upstream: helm-uninstall"
+	@echo ""
+	@echo "Other:"
+	@echo "  make submodule-status    git submodule status --recursive"
+	@echo "  make check-links         Markdown link check (same paths as CI; uses npx if CLI missing)"
+	@echo ""
+	@echo "Requires submodule: git submodule update --init --recursive"
+	@echo "Docs: docs/zammad/install-openshift.md · docs/glue.md"
+
+.PHONY: check-links
+check-links:
+	@env MARKDOWN_LINK_CHECK_VERSION="$(MARKDOWN_LINK_CHECK_VERSION)" ./scripts/check-markdown-links.sh
+
+.PHONY: submodule-status
+submodule-status:
+	git submodule status --recursive
+
+.PHONY: install uninstall
+install:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) helm-install-ticketing NAMESPACE="$(NAMESPACE)"
+
+uninstall:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) helm-uninstall NAMESPACE="$(NAMESPACE)"
