@@ -13,7 +13,7 @@ If you already cloned without submodules: `git submodule update --init --recursi
 
 Submodule workflow and compatibility: **[docs/upstream.md](docs/upstream.md)** · **[CONTRIBUTING.md](CONTRIBUTING.md)**
 
-**Upstream submodule pin (audit):** full SHA is in **[docs/upstream.md#current-pin](docs/upstream.md#current-pin)** — update that table whenever you bump `it-self-service-agent`.
+**Upstream submodule pin:** full SHA is in **[docs/upstream.md#current-pin](docs/upstream.md#current-pin)** — update that table whenever you bump `it-self-service-agent`.
 
 ## Documentation
 
@@ -33,7 +33,7 @@ There is **no** Helm chart published from the root of this repository.
 
 ## Maintenance & CI
 
-- **CI** runs on pushes and pull requests to **`main`** and **`dev`**: verifies **`it-self-service-agent`** checks out as a submodule (see [.github/workflows/ci.yml](.github/workflows/ci.yml)). A non-blocking job runs **`make check-links`** (same as locally).
+- **CI** runs on **pull requests** to **`main`** and **`dev`**: verifies **`it-self-service-agent`** checks out as a submodule (see [.github/workflows/ci.yml](.github/workflows/ci.yml)). A non-blocking job runs **`make check-links`** (same as locally).
 - **Dependabot** can open weekly PRs for the submodule (see [.github/dependabot.yml](.github/dependabot.yml)); review against upstream release notes before merging.
 - **Tags / releases:** see **[docs/releases.md](docs/releases.md)**.
 
