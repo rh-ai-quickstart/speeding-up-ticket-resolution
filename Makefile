@@ -9,6 +9,7 @@ help:
 	@echo "From repo root (Zammad ticketing profile):"
 	@echo "  make install NAMESPACE=<ns>     upstream: helm-install-ticketing"
 	@echo "  make uninstall NAMESPACE=<ns>   upstream: helm-uninstall"
+	@echo "  Other upstream vars (e.g. ZAMMAD_URL): same as submodule — use VAR=value or export."
 	@echo ""
 	@echo "Other:"
 	@echo "  make submodule-status    git submodule status --recursive"
@@ -28,8 +29,8 @@ submodule-status:
 .PHONY: install uninstall
 install:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
-	$(MAKE) -C $(SUBMODULE) helm-install-ticketing NAMESPACE="$(NAMESPACE)"
+	$(MAKE) -C $(SUBMODULE) helm-install-ticketing
 
 uninstall:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
-	$(MAKE) -C $(SUBMODULE) helm-uninstall NAMESPACE="$(NAMESPACE)"
+	$(MAKE) -C $(SUBMODULE) helm-uninstall
