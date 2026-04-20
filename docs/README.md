@@ -35,7 +35,7 @@ This repository is a **thin wrapper** around [rh-ai-quickstart/it-self-service-a
 
 - Prefer **linking** to upstream `docs/` / `guides/`; duplicate only Zammad deltas here.
 - Maintain a **compatibility matrix** (wrapper/submodule SHA, OpenShift/OAI, Zammad) in [upstream.md](upstream.md).
-- Keep **glue thin**: root `Makefile`, `scripts/`, and `examples/` only delegate or document paths into the submodule ([glue.md](glue.md)).
+- Keep **glue thin**: root **`Makefile`** and **`examples/`** only delegate or document paths into the submodule ([glue.md](glue.md)).
 
 ## Risks
 
@@ -55,7 +55,7 @@ A new contributor can clone with submodules, follow one Zammad install path, dep
 | CI (submodule sanity, **`make check-links`**) | [.github/workflows/ci.yml](../.github/workflows/ci.yml) |
 | Submodule bump PRs | [.github/dependabot.yml](../.github/dependabot.yml) |
 | Tags and release notes | [releases.md](releases.md) |
-| Root glue + maintainer checklist | [glue.md](glue.md), root **`Makefile`**, **`scripts/`**, **`examples/`** |
+| Root glue + maintainer checklist | [glue.md](glue.md), root **`Makefile`**, **`examples/`** |
 
 **Directory layout:** see the tree in the root [README](../README.md#repository-layout).
 

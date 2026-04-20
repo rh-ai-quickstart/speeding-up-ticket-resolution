@@ -1,6 +1,6 @@
 # Glue and maintainer checklist
 
-This document describes **wrapper glue** (root `Makefile`, `scripts/`, `examples/`) and what **maintainers should verify** when bumps, CI, or releases change. Upstream behavior stays authoritative under **`it-self-service-agent/`**.
+This document describes **wrapper glue** (root **`Makefile`**, **`examples/`**) and what **maintainers should verify** when bumps, CI, or releases change. (`scripts/check-markdown-links.sh` supports **`make check-links`** only—not deploy glue.) Upstream behavior stays authoritative under **`it-self-service-agent/`**.
 
 ## Glue plan
 
@@ -9,7 +9,6 @@ This document describes **wrapper glue** (root `Makefile`, `scripts/`, `examples
 | Artifact | Role |
 |----------|------|
 | **Root `Makefile`** | Delegates to the submodule with `make -C it-self-service-agent …`. Same targets, same variables (`NAMESPACE`, optional upstream vars). |
-| **`scripts/`** | Optional POSIX sh wrappers that call the root Makefile or submodule Makefile—convenience for automation that prefers a script entrypoint. |
 | **`examples/`** | Documentation and **non-secret** placeholders only (env var names, namespace reminders). No credentials; values overrides belong as references into submodule paths. |
 
 **Rules**
@@ -37,13 +36,12 @@ Use these checks when reviewing **submodule bumps**, **Dependabot PRs**, or **re
 | Docs/links not badly broken | **`make check-links`** in CI (`markdown-links` job, non-blocking)—same script as locally |
 | Dependabot proposed bump | [.github/dependabot.yml](../.github/dependabot.yml)—merge only after manual validation and doc updates |
 
-### 3. Glue sanity (after changing Makefile/scripts)
+### 3. Glue sanity (after changing the root Makefile)
 
 | Check | Command / expectation |
 |--------|------------------------|
 | Help runs without submodule commands that need `NAMESPACE` | `make help` |
 | Delegation is a straight pass-through | Root targets only `make -C it-self-service-agent …` with the same target names upstream documents |
-| Scripts are thin | `scripts/*.sh` should only set/clear env and `exec make` or `make -C` |
 
 ### 4. Releases (optional snapshot)
 
@@ -55,7 +53,7 @@ Use these checks when reviewing **submodule bumps**, **Dependabot PRs**, or **re
 
 1. `git submodule status` matches **Current pin** in `docs/upstream.md`.
 2. Links in `docs/` still resolve (spot-check or wait for CI link job).
-3. If root `Makefile`/`scripts/` changed: `make help` and targeted `make -n` smoke if available.
+3. If the root **`Makefile`** changed: `make help` and targeted `make -n` smoke if available.
 
 ---
 

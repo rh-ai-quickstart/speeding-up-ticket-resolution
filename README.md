@@ -23,7 +23,7 @@ Submodule workflow and compatibility: **[docs/upstream.md](docs/upstream.md)** �
 | Submodule bumps / pins | [docs/upstream.md](docs/upstream.md) |
 | Zammad channel (thin layer; links into submodule) | [docs/zammad/README.md](docs/zammad/README.md) |
 | Tags and release notes (submodule SHA) | [docs/releases.md](docs/releases.md) |
-| Glue (Make/scripts) and maintainer checklist | [docs/glue.md](docs/glue.md) |
+| Glue (Makefile) and maintainer checklist | [docs/glue.md](docs/glue.md) |
 
 ## Deploy
 
@@ -52,7 +52,7 @@ There is **no** Helm chart published from the root of this repository.
 │   ├── releases.md         # Tagging notes
 │   └── zammad/             # Zammad ticketing notes (links upstream)
 ├── examples/               # Placeholder notes (no secrets)
-├── scripts/                # Optional wrappers → root Makefile
+├── scripts/                # check-markdown-links.sh — used by make check-links
 ├── it-self-service-agent/  # Git submodule — app, Helm charts, Makefile
 ├── CONTRIBUTING.md
 └── README.md

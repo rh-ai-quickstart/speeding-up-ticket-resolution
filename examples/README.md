@@ -15,8 +15,6 @@ export NAMESPACE=my-team-ticketing
 make install NAMESPACE="${NAMESPACE}"
 ```
 
-Same via script: `scripts/install.sh NAMESPACE=...` (delegates to the root Makefile).
-
 ## Where real values live
 
 Upstream charts and sample values paths are under **`it-self-service-agent/helm/`**—see [docs/zammad/install-openshift.md](../docs/zammad/install-openshift.md). Add team-specific overrides by following upstream patterns; keep wrapper deltas small and documented.

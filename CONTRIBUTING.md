@@ -19,6 +19,6 @@
 - **Dependabot** (`.github/dependabot.yml`): may propose submodule bumps weekly. Merge only after validating upstream and updating [docs/upstream.md](docs/upstream.md).
 - **Version tags:** see [docs/releases.md](docs/releases.md).
 
-## Glue (`Makefile`, `scripts/`, `examples/`)
+## Glue (`Makefile`, `examples/`)
 
-Keep glue **thin**—delegate to **`it-self-service-agent/Makefile`**. When changing root targets or scripts, update [docs/glue.md](docs/glue.md) if the maintainer checklist there needs to change.
+Keep glue **thin**—delegate to **`it-self-service-agent/Makefile`**. When changing root targets, update [docs/glue.md](docs/glue.md) if the maintainer checklist there needs to change.
