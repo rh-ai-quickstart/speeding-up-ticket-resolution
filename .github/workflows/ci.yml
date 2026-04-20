@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-submodule:
+    name: Verify submodule
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout with submodules
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Assert it-self-service-agent is present and valid
+        run: |
+          set -euo pipefail
+          test -f it-self-service-agent/Makefile
+          test -e it-self-service-agent/.git
+          git submodule status --recursive
+          (cd it-self-service-agent && git rev-parse HEAD && git cat-file -t "$(git rev-parse HEAD)" | grep -q '^commit$')
+
+  markdown-links:
+    name: Markdown links
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    env:
+      # Pin CLI; avoids transitive-dep drift when the global install target floats with Node/npm (Docker lts images have broken markdown-link-check in CI).
+      MARKDOWN_LINK_CHECK_VERSION: "3.10.3"
+    steps:
+      - name: Checkout with submodules
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install markdown-link-check
+        run: npm install -g "markdown-link-check@${MARKDOWN_LINK_CHECK_VERSION}"
+
+      - name: Check Markdown links
+        run: |
+          set -euo pipefail
+          ec=0
+          while IFS= read -r -d '' f; do
+            markdown-link-check -q -c .markdown-link-check.json "$f" || ec=1
+          done < <(find docs -name '*.md' -print0 | sort -z)
+          for f in README.md CONTRIBUTING.md wrapper-repository-plan.md; do
+            markdown-link-check -q -c .markdown-link-check.json "$f" || ec=1
+          done
+          exit "$ec"

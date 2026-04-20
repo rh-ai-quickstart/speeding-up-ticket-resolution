@@ -12,3 +12,5 @@
 After bumping the submodule ([CONTRIBUTING.md](../CONTRIBUTING.md)), refresh **links and short “delta” paragraphs** in `docs/` if behavior changed. Prefer **opening PRs upstream** for long procedural content so this repo stays pointers + policy.
 
 See [zammad/README.md](zammad/README.md) for how that applies to the ticketing channel.
+
+Releases and tagging this wrapper (with submodule SHA in release notes): [releases.md](releases.md).

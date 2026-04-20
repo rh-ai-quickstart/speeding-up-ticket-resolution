@@ -13,6 +13,8 @@ If you already cloned without submodules: `git submodule update --init --recursi
 
 Submodule workflow and compatibility: **[docs/upstream.md](docs/upstream.md)** · **[CONTRIBUTING.md](CONTRIBUTING.md)**
 
+**Upstream submodule pin (audit):** full SHA is in **[docs/upstream.md#current-pin](docs/upstream.md#current-pin)** — update that table whenever you bump `it-self-service-agent`.
+
 ## Documentation
 
 | Topic | Location |
@@ -20,6 +22,7 @@ Submodule workflow and compatibility: **[docs/upstream.md](docs/upstream.md)** �
 | Wrapper vs upstream split | [docs/README.md](docs/README.md) |
 | Submodule bumps / pins | [docs/upstream.md](docs/upstream.md) |
 | Zammad channel (thin layer; links into submodule) | [docs/zammad/README.md](docs/zammad/README.md) |
+| Tags and release notes (submodule SHA) | [docs/releases.md](docs/releases.md) |
 
 ## Deploy
 
@@ -27,13 +30,23 @@ Install and upgrade paths use **`make`** and Helm **inside** the submodule (for 
 
 There is **no** Helm chart published from the root of this repository.
 
+## Maintenance & CI
+
+- **CI** runs on pushes and pull requests to **`main`** and **`dev`**: verifies **`it-self-service-agent`** checks out as a submodule (see [.github/workflows/ci.yml](.github/workflows/ci.yml)). A non-blocking job checks Markdown links.
+- **Dependabot** can open weekly PRs for the submodule (see [.github/dependabot.yml](.github/dependabot.yml)); review against upstream release notes before merging.
+- **Tags / releases:** see **[docs/releases.md](docs/releases.md)**.
+
 ## Repository layout
 
 ```
 .
+├── .github/
+│   ├── dependabot.yml      # Weekly submodule update PRs (optional review)
+│   └── workflows/ci.yml    # Submodule presence + Markdown link check
 ├── docs/
 │   ├── README.md           # Documentation split (wrapper vs submodule)
 │   ├── upstream.md         # Submodule clone, bump, compatibility matrix
+│   ├── releases.md         # Tagging notes
 │   └── zammad/             # Zammad ticketing notes (links upstream)
 ├── it-self-service-agent/  # Git submodule — app, Helm charts, Makefile
 ├── CONTRIBUTING.md

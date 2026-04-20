@@ -1,0 +1,13 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^https://github\\.com/<org>/"
+    },
+    {
+      "pattern": "^https://github\\.com/your-org/"
+    }
+  ],
+  "retryOn429": true,
+  "retryCount": 2,
+  "timeout": "20s"
+}
