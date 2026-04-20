@@ -27,7 +27,7 @@ Submodule workflow and compatibility: **[docs/upstream.md](docs/upstream.md)** �
 
 ## Deploy
 
-From the **repository root**, you can delegate to upstream with **`make install NAMESPACE=…`** (see root **`Makefile`**) or run **`make helm-install-ticketing`** inside **`it-self-service-agent/`** as today. Install and upgrade paths ultimately use **`make`** and Helm **inside** the submodule. Start at **[docs/zammad/install-openshift.md](docs/zammad/install-openshift.md)** and treat upstream **`it-self-service-agent/Makefile`** as the source of truth.
+Run **`make install NAMESPACE=…`** from the repo root (see [`Makefile`](Makefile)), or **`make helm-install-ticketing`** inside **`it-self-service-agent/`** — same upstream behavior. Procedures and Helm live in the submodule; start at **[docs/zammad/install-openshift.md](docs/zammad/install-openshift.md)**.
 
 There is **no** Helm chart published from the root of this repository.
 
