@@ -13,14 +13,18 @@ help:
 	@echo ""
 	@echo "Other:"
 	@echo "  make submodule-status    git submodule status --recursive"
-	@echo "  make check-links         Markdown link check (same paths as CI; uses npx if CLI missing)"
+	@echo "  make check-links         Vets upstream blob/tree SHAs vs submodule; then HTTP link check (CI)"
+	@echo "  make sync-upstream-links Rewrite upstream github.com/.../blob|tree/<sha>/ URLs to submodule HEAD"
 	@echo ""
 	@echo "Requires submodule: git submodule update --init --recursive"
 	@echo "Docs: docs/zammad/install-openshift.md · docs/glue.md"
 
-.PHONY: check-links
+.PHONY: check-links sync-upstream-links
 check-links:
 	@env MARKDOWN_LINK_CHECK_VERSION="$(MARKDOWN_LINK_CHECK_VERSION)" ./scripts/check-markdown-links.sh
+
+sync-upstream-links:
+	@./scripts/sync-upstream-github-links.sh
 
 .PHONY: submodule-status
 submodule-status:

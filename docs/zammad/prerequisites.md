@@ -2,7 +2,7 @@
 
 ## Authority for versions and requirements
 
-Use **`it-self-service-agent/README.md`** and upstream guides for **supported OpenShift / OpenShift AI versions**, CLI versions, and resource assumptions. This file only lists **wrapper-relevant** expectations.
+Use **[upstream `README.md`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/0b5f37bfe00b7710cfe1076cde3071467477d989/README.md)** and upstream guides for **supported OpenShift / OpenShift AI versions**, CLI versions, and resource assumptions. This file only lists **wrapper-relevant** expectations.
 
 ## Cluster
 
@@ -12,7 +12,7 @@ Use **`it-self-service-agent/README.md`** and upstream guides for **supported Op
 
 ## Tools
 
-- **`oc`**, **`kubectl`**, **`helm`** (v3)—as required by upstream `Makefile` targets you run from [`it-self-service-agent/`](../../it-self-service-agent).
+- **`oc`**, **`kubectl`**, **`helm`** (v3)—as required by upstream `Makefile` targets you run from **`it-self-service-agent/`** ([upstream tree at pin](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/0b5f37bfe00b7710cfe1076cde3071467477d989)).
 
 ## Planning
 
