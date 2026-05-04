@@ -1,10 +1,10 @@
 # Glue and maintainer checklist
 
-This document describes **wrapper glue** (root **`Makefile`**, **`examples/`**) and what **maintainers should verify** when bumps, CI, or releases change. (`scripts/check-markdown-links.sh` supports **`make check-links`** only—not deploy glue.) Upstream behavior stays authoritative under **`it-self-service-agent/`**.
+This document describes **wrapper glue** (root **`Makefile`**, **`examples/`**) and what **maintainers should verify** when bumps, CI, or releases change. (`scripts/check-markdown-links.sh` runs **`upstream-doc-urls.lib.sh`** pin checks, then **`markdown-link-check`** — **`make check-links`** only—not deploy glue.) Upstream behavior stays authoritative under **`it-self-service-agent/`**.
 
 ## Glue plan
 
-**Goal:** Operators can run installs from the **repository root** without memorizing paths, while **install logic remains** in [it-self-service-agent/Makefile](../it-self-service-agent/Makefile).
+**Goal:** Operators can run installs from the **repository root** without memorizing paths, while **install logic remains** in [it-self-service-agent/Makefile](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/0b5f37bfe00b7710cfe1076cde3071467477d989/Makefile).
 
 | Artifact | Role |
 |----------|------|

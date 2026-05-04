@@ -5,7 +5,7 @@
 - The upstream app lives in **`it-self-service-agent`** at the repo root (submodule → [it-self-service-agent](https://github.com/rh-ai-quickstart/it-self-service-agent)).
 - When moving to a newer upstream revision, **advance the pin from upstream `dev`** (see [Upstream branch policy](docs/README.md#upstream-branch-policy) in [docs/README.md](docs/README.md)); validate locally, then commit the updated submodule pointer.
 - Update [docs/upstream.md](docs/upstream.md): **Current pin** and, when applicable, the **Compatibility matrix**.
-- Skim [docs/](docs/README.md) and [docs/zammad/](docs/zammad/README.md): if upstream moved Makefile paths or renamed targets, fix **links** (keep procedural detail in the submodule).
+- Skim [docs/](docs/README.md) and [docs/zammad/](docs/zammad/README.md): if upstream moved Makefile paths or renamed targets, fix **links** (keep procedural detail in the submodule). After bumping the submodule, run **`make sync-upstream-links`** so every upstream **`github.com/.../(blob|tree)/<sha>/`** URL and matching SHA in doc tables updates together (see [docs/upstream.md](docs/upstream.md)).
 - Prefer a single commit that only bumps the submodule (and doc table), with a message like `chore: bump upstream it-self-service-agent`.
 
 ## Documentation

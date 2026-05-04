@@ -3,7 +3,25 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$ROOT"
+cd "$ROOT" || exit 1
+
+# shellcheck disable=SC1091
+. "$ROOT/scripts/upstream-doc-urls.lib.sh"
+
+# Read-only: same pin rules as sync-upstream-links (without modifying files).
+if ! upstream_doc_validate_sha_lengths; then
+  exit 1
+fi
+
+SUBMODULE="it-self-service-agent"
+if [ -d "$SUBMODULE/.git" ] || [ -f "$SUBMODULE/.git" ]; then
+  PIN="$(git -C "$SUBMODULE" rev-parse HEAD)"
+  if ! upstream_doc_assert_urls_match_pin "$PIN"; then
+    exit 1
+  fi
+else
+  echo "warning: submodule ${SUBMODULE} missing — skipping pin match (clone with --recurse-submodules)." >&2
+fi
 
 VERSION="${MARKDOWN_LINK_CHECK_VERSION:-3.10.3}"
 CONFIG=".markdown-link-check.json"

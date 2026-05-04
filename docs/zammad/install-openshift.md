@@ -30,9 +30,9 @@ make helm-install-ticketing NAMESPACE="${NAMESPACE}"
 
 **What to read while it runs:**
 
-- Target implementation and printed checklist: [`Makefile`](../../it-self-service-agent/Makefile) (`helm-install-ticketing`, `_helm-install-ticketing-single`, `_helm-install-ticketing-print-checklist`, `deploy-zammad`).
-- Values overlays: [`helm/values-ticketing.yaml`](../../it-self-service-agent/helm/values-ticketing.yaml), [`helm/values-test.yaml`](../../it-self-service-agent/helm/values-test.yaml) (as referenced by that target).
-- Zammad deployment stack: [`helm/zammad/`](../../it-self-service-agent/helm/zammad/), [`helm/values-zammad-deploy.yaml`](../../it-self-service-agent/helm/values-zammad-deploy.yaml).
+- Target implementation and printed checklist: [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/0b5f37bfe00b7710cfe1076cde3071467477d989/Makefile) (`helm-install-ticketing`, `_helm-install-ticketing-single`, `_helm-install-ticketing-print-checklist`, `deploy-zammad`).
+- Values overlays: [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/0b5f37bfe00b7710cfe1076cde3071467477d989/helm/values-ticketing.yaml), [`helm/values-test.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/0b5f37bfe00b7710cfe1076cde3071467477d989/helm/values-test.yaml) (as referenced by that target).
+- Zammad deployment stack: [`helm/zammad/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/0b5f37bfe00b7710cfe1076cde3071467477d989/helm/zammad), [`helm/values-zammad-deploy.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/0b5f37bfe00b7710cfe1076cde3071467477d989/helm/values-zammad-deploy.yaml).
 
 Expect **15+ minutes** on first deploy (Zammad dependencies). Watch pods: `kubectl get pods -n "${NAMESPACE}" -w`.
 
