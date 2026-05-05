@@ -1,0 +1,45 @@
+# When Dependabot bumps it-self-service-agent, rewrite docs that pin upstream blob/tree SHAs.
+name: Sync upstream links (Dependabot submodule)
+
+on:
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - "it-self-service-agent"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream-links-${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: make sync-upstream-links
+    runs-on: ubuntu-latest
+    if: >-
+      github.actor == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout PR head with submodules
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref }}
+          submodules: recursive
+
+      - name: Rewrite upstream GitHub links to submodule HEAD
+        run: make sync-upstream-links
+
+      - name: Commit and push if docs changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No doc URL changes; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -u
+          git commit -m "chore(docs): sync upstream GitHub links for submodule bump"
+          git push origin "HEAD:${{ github.head_ref }}"
