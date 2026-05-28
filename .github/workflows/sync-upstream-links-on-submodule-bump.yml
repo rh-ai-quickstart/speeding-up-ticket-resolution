@@ -22,10 +22,18 @@ jobs:
       github.actor == 'dependabot[bot]' &&
       github.event.pull_request.head.repo.full_name == github.repository
     steps:
+      - name: Generate GitHub App Token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.PR_CREATION_APP_IT_SELF_SERVICE_ID }}
+          private-key: ${{ secrets.PR_CREATION_APP_IT_SELF_SERVICE_PRIVATE_KEY }}
+
       - name: Checkout PR head with submodules
         uses: actions/checkout@v5
         with:
           ref: ${{ github.head_ref }}
+          token: ${{ steps.generate_token.outputs.token }}
           submodules: recursive
 
       - name: Rewrite upstream GitHub links to submodule HEAD
