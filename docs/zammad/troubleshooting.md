@@ -6,7 +6,7 @@
 
 | Area | Where to look |
 |------|----------------|
-| Install order, FQDN, token steps | [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/c50eb25bbd53e62c7d9418ed2c80cdf93a7dd9af/Makefile) targets **`helm-install-ticketing`**, **`deploy-zammad`**, **`zammad-bootstrap-token`** |
+| Install order, FQDN, token steps | [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/3ee4fdf294f4c1638f52ba825fd019df6c1f739c/Makefile) targets **`helm-install-ticketing`**, **`deploy-zammad`**, **`zammad-bootstrap-token`** |
 | Zammad pod failures | `kubectl logs` / `kubectl describe` for `zammad-railsserver`, Elasticsearch, etc. |
 | MCP auth to Zammad | Secret keys in [configure-channel.md](configure-channel.md); logs on deployment **`mcp-zammad-mcp`** (name may vary with release prefix—`kubectl get deploy -n "$NAMESPACE" \| grep -i zammad`) |
 | Redirect / HTTPS behind Route | How upstream sets **`ZAMMAD_FQDN`** / **`ZAMMAD_HTTP_TYPE`** in **`deploy-zammad`** |
