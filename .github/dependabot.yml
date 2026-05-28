@@ -4,7 +4,9 @@ updates:
   - package-ecosystem: gitsubmodule
     directory: "/"
     schedule:
-      interval: weekly
-      day: monday
+      interval: daily
+      time: "19:00"
+      timezone: "America/New_York"
+    target-branch: dev
     commit-message:
-      prefix: "chore(deps-submodule)"
+      prefix: "chore: update submodule"
