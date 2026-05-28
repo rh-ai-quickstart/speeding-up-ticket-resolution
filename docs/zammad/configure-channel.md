@@ -31,8 +31,8 @@ Routes (**`ssa-zammad`**, **`ssa-zammad-embed`**) and hostnames are created by u
 
 ## Chat widget
 
-Zammad **Admin → Channels → Chat**, embed chart under [`helm/zammad-embed/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/c50eb25bbd53e62c7d9418ed2c80cdf93a7dd9af/helm/zammad-embed). Align `chatId` in [`helm/zammad-embed/values.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/c50eb25bbd53e62c7d9418ed2c80cdf93a7dd9af/helm/zammad-embed/values.yaml) if needed.
+Zammad **Admin → Channels → Chat**, embed chart under [`helm/zammad-demo-site/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/c50eb25bbd53e62c7d9418ed2c80cdf93a7dd9af/helm/zammad-demo-site). Align `chatId` in [`helm/zammad-demo-site/values.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/c50eb25bbd53e62c7d9418ed2c80cdf93a7dd9af/helm/zammad-demo-site/values.yaml) if needed.
 
 ## Production
 
-Replace demo credentials in [`helm/values-zammad-deploy.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/c50eb25bbd53e62c7d9418ed2c80cdf93a7dd9af/helm/values-zammad-deploy.yaml) and autoWizard token with your org’s secret management—**never commit real secrets to this wrapper repo.**
+Replace demo credentials in [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/c50eb25bbd53e62c7d9418ed2c80cdf93a7dd9af/helm/values-ticketing.yaml) and autoWizard token with your org’s secret management—**never commit real secrets to this wrapper repo.**

@@ -3,16 +3,16 @@ name: Sync upstream links (Dependabot submodule)
 
 on:
   pull_request:
-    branches: [main, dev]
+    branches: [dev]
     paths:
       - "it-self-service-agent"
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: sync-upstream-links-${{ github.workflow }}-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
 
 jobs:
   sync:
@@ -43,3 +43,11 @@ jobs:
           git add -u
           git commit -m "chore(docs): sync upstream GitHub links for submodule bump"
           git push origin "HEAD:${{ github.head_ref }}"
+
+      - name: Approve and enable auto-merge
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
