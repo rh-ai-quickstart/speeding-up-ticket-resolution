@@ -52,6 +52,21 @@ jobs:
           git commit -m "chore(docs): sync upstream GitHub links for submodule bump"
           git push origin "HEAD:${{ github.head_ref }}"
 
+  approve:
+    name: Approve and enable auto-merge
+    runs-on: ubuntu-latest
+    needs: [sync]
+    if: >-
+      github.actor == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Generate GitHub App Token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.PR_CREATION_APP_IT_SELF_SERVICE_ID }}
+          private-key: ${{ secrets.PR_CREATION_APP_IT_SELF_SERVICE_PRIVATE_KEY }}
+
       - name: Approve and enable auto-merge
         run: |
           gh pr review --approve "$PR_URL"
