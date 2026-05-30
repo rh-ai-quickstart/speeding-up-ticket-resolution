@@ -1,6 +1,6 @@
 # Zammad ticketing channel
 
-This folder is a **thin integration layer** over the pinned upstream app in **`it-self-service-agent/`** ([browse at pinned commit on GitHub](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/ccc789f9539ea980952c296b91e5744773c8f74b); repo [`rh-ai-quickstart/it-self-service-agent`](https://github.com/rh-ai-quickstart/it-self-service-agent)). Submodule branch policy and SHA: [docs/upstream.md](../../docs/upstream.md).
+This folder is a **thin integration layer** over the pinned upstream app in **`it-self-service-agent/`** ([browse at pinned commit on GitHub](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/1da6909b42b2b59bc37a8aee96189c82a332efb2); repo [`rh-ai-quickstart/it-self-service-agent`](https://github.com/rh-ai-quickstart/it-self-service-agent)). Submodule branch policy and SHA: [docs/upstream.md](../../docs/upstream.md).
 
 ## Documentation policy (recommended split)
 
@@ -14,8 +14,8 @@ This folder is a **thin integration layer** over the pinned upstream app in **`i
 
 **Canonical sources for ticketing:**
 
-- [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/ccc789f9539ea980952c296b91e5744773c8f74b/Makefile) — search targets **`helm-install-ticketing`**, **`deploy-zammad`**, **`zammad-bootstrap-token`**, **`zammad-set-token`**, **`undeploy-zammad`**
-- [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/ccc789f9539ea980952c296b91e5744773c8f74b/helm/values-ticketing.yaml), [`helm/zammad/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/ccc789f9539ea980952c296b91e5744773c8f74b/helm/zammad)
+- [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/1da6909b42b2b59bc37a8aee96189c82a332efb2/Makefile) — search targets **`helm-install-ticketing`**, **`deploy-zammad`**, **`zammad-bootstrap-token`**, **`zammad-set-token`**, **`undeploy-zammad`**
+- [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/1da6909b42b2b59bc37a8aee96189c82a332efb2/helm/values-ticketing.yaml), [`helm/zammad/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/1da6909b42b2b59bc37a8aee96189c82a332efb2/helm/zammad)
 - Same pin as **Current pin** in [docs/upstream.md](../../docs/upstream.md); update those URLs when you bump the submodule.
 
 ## Documents
