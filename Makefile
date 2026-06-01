@@ -9,6 +9,7 @@ help:
 	@echo "From repo root (Zammad ticketing profile):"
 	@echo "  make install NAMESPACE=<ns>     upstream: helm-install-ticketing"
 	@echo "  make uninstall NAMESPACE=<ns>   upstream: helm-uninstall"
+	@echo "  make helm-status NAMESPACE=<ns> upstream: helm-status"
 	@echo "  Other upstream vars (e.g. ZAMMAD_URL): same as submodule — use VAR=value or export."
 	@echo ""
 	@echo "Other:"
@@ -38,3 +39,43 @@ install:
 uninstall:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
 	$(MAKE) -C $(SUBMODULE) helm-uninstall
+
+.PHONY: test-short-ticket-laptop-refresh
+test-short-ticket-laptop-refresh:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) test-short-ticket-laptop-refresh
+
+.PHONY: helm-status
+helm-status:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) helm-status
+
+.PHONY: jaeger-deploy
+jaeger-deploy:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) jaeger-deploy
+
+.PHONY: jaeger-undeploy
+jaeger-undeploy:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) jaeger-undeploy
+
+.PHONY: deploy-nemo-guardrails
+deploy-nemo-guardrails:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) deploy-nemo-guardrails
+
+.PHONY: undeploy-nemo-guardrails
+undeploy-nemo-guardrails:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) undeploy-nemo-guardrails
+
+.PHONY: build-all-images
+build-all-images:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) build-all-images
+
+.PHONY: push-all-images
+push-all-images:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) push-all-images
