@@ -68,15 +68,10 @@ test-short-ticket-laptop-refresh:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
 	$(MAKE) -C $(SUBMODULE) test-short-ticket-laptop-refresh
 
-.PHONY: test-short-ticket-laptop-refresh-scout-deploy
-test-short-ticket-laptop-refresh-scout-deploy:
+.PHONY: test-long-ticket-laptop-refresh
+test-long-ticket-laptop-refresh:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
-	$(MAKE) -C $(SUBMODULE) test-short-ticket-laptop-refresh-scout-deploy
-
-.PHONY: test-short-ticket-laptop-refresh-70b-deploy
-test-short-ticket-laptop-refresh-70b-deploy:
-	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
-	$(MAKE) -C $(SUBMODULE) test-short-ticket-laptop-refresh-70b-deploy
+	$(MAKE) -C $(SUBMODULE) test-long-ticket-laptop-refresh
 
 .PHONY: helm-status
 helm-status:

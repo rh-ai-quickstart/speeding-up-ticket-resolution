@@ -95,7 +95,7 @@ jobs:
         shell: bash
         working-directory: it-self-service-agent
         run: |
-          make test-short-ticket-laptop-refresh-scout-deploy
+          make test-long-ticket-laptop-refresh
         env:
           LLM_URL: ${{ vars.LLM_URL_EVAL_70B }}
           LLM_API_TOKEN: ${{ secrets.LLM_API_TOKEN_EVAL_70B }}
