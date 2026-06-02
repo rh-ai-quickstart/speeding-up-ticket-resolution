@@ -5,6 +5,15 @@
     },
     {
       "pattern": "^https://github\\.com/your-org/"
+    },
+    {
+      "pattern": "^https://docs\\.redhat\\.com/"
+    },
+    {
+      "pattern": "^https://developers\\.redhat\\.com/"
+    },
+    {
+      "pattern": "^https://docs\\.openshift\\.com/"
     }
   ],
   "retryOn429": true,
