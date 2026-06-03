@@ -14,6 +14,9 @@
     },
     {
       "pattern": "^https://docs\\.openshift\\.com/"
+    },
+    {
+      "pattern": "^https://huggingface\\.co/"
     }
   ],
   "retryOn429": true,
