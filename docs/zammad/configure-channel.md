@@ -1,6 +1,6 @@
 # Configure the Zammad channel
 
-**Commands and rollout order are defined in** [`it-self-service-agent/Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/d7ff1c5dee7c316f8fcd6bf563b7ce00b57ae441/Makefile). This page only describes the **contract** this repo cares about.
+**Commands and rollout order are defined in** [`it-self-service-agent/Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/79378a32d32fd10eddf1c35af07f6f2b1a9c217c/Makefile). This page only describes the **contract** this repo cares about.
 
 ## Credentials Secret
 
@@ -11,7 +11,7 @@ Default name pattern: **`self-service-agent-zammad-credentials`** (from upstream
 | **`zammad-url`** | Zammad REST API base for MCP (typically ends with **`/api/v1`** for in-cluster installs—match what the Makefile writes). |
 | **`zammad-http-token`** | Token MCP uses for API calls |
 
-Env wiring from Secret to pods: upstream [`helm/templates/_env-helpers.tpl`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/d7ff1c5dee7c316f8fcd6bf563b7ce00b57ae441/helm/templates/_env-helpers.tpl) (when `zammad.enabled`).
+Env wiring from Secret to pods: upstream [`helm/templates/_env-helpers.tpl`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/79378a32d32fd10eddf1c35af07f6f2b1a9c217c/helm/templates/_env-helpers.tpl) (when `zammad.enabled`).
 
 ## Token creation and rotation
 
@@ -19,7 +19,7 @@ Use Makefile targets (do not re-document their Ruby/curl internals here—they c
 
 | Target | Use |
 |--------|-----|
-| **`zammad-bootstrap-token`** | Preferred path after Zammad is up; see target body in [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/d7ff1c5dee7c316f8fcd6bf563b7ce00b57ae441/Makefile). |
+| **`zammad-bootstrap-token`** | Preferred path after Zammad is up; see target body in [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/79378a32d32fd10eddf1c35af07f6f2b1a9c217c/Makefile). |
 | **`zammad-trigger-autowizard`** | If admin/bootstrap is not completed. |
 | **`zammad-set-token`** | After creating a token manually in Zammad UI. |
 
@@ -31,8 +31,8 @@ Routes (**`ssa-zammad`**, **`ssa-zammad-embed`**) and hostnames are created by u
 
 ## Chat widget
 
-Zammad **Admin → Channels → Chat**, embed chart under [`helm/zammad-demo-site/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/d7ff1c5dee7c316f8fcd6bf563b7ce00b57ae441/helm/zammad-demo-site). Align `chatId` in [`helm/zammad-demo-site/values.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/d7ff1c5dee7c316f8fcd6bf563b7ce00b57ae441/helm/zammad-demo-site/values.yaml) if needed.
+Zammad **Admin → Channels → Chat**, embed chart under [`helm/zammad-demo-site/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/79378a32d32fd10eddf1c35af07f6f2b1a9c217c/helm/zammad-demo-site). Align `chatId` in [`helm/zammad-demo-site/values.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/79378a32d32fd10eddf1c35af07f6f2b1a9c217c/helm/zammad-demo-site/values.yaml) if needed.
 
 ## Production
 
-Replace demo credentials in [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/d7ff1c5dee7c316f8fcd6bf563b7ce00b57ae441/helm/values-ticketing.yaml) and autoWizard token with your org’s secret management—**never commit real secrets to this wrapper repo.**
+Replace demo credentials in [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/79378a32d32fd10eddf1c35af07f6f2b1a9c217c/helm/values-ticketing.yaml) and autoWizard token with your org’s secret management—**never commit real secrets to this wrapper repo.**
