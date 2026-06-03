@@ -132,7 +132,7 @@ This technology stack provides a foundation for building scalable, observable AI
 
 This quickstart is built as an extension to the reusable components in the [it-self-service-agent](https://github.com/rh-ai-quickstart/it-self-service-agent) quickstart with the addition of integration with the [Zammad ticketing system](https://github.com/zammad/zammad) and new agents that know how to interact through the ticketing system.
 
-TODO: add picture here
+![Demo site page](docs/images/architecture-ticket.png)
 
 For details on the core components including communication channels, the request manager, and the agent service refer to the detailed documentation in the it-self-service-agent quickstart.
 
@@ -282,6 +282,8 @@ For detailed information about deployment modes, see the [Deployment Mode Guide]
 
 #### Step 2: set required environment variables
 
+Set the required environment variables with:
+
 ```bash
 # Set your namespace
 export NAMESPACE=your-namespace
@@ -293,6 +295,11 @@ export LLM_API_TOKEN=your-api-token
 export LLM_URL=https://your-llm-endpoint
 export LG_PROMPT_TICKET_LAPTOP_REFRESH=/app/agent-service/config/lg-prompts/ticket-laptop-refresh-lg-prompt-small-scout.yaml
 ```
+
+By default this quickstart assumes you are deploying with the `Llama-4-Scout-17B-16E` model as shown above. If you are
+using `Llama 3 70b` you will need to change LG_PROMPT_TICKET_LAPTOP_REFRESH to
+`/app/agent-service/config/lg-prompts/ticket-laptop-refresh-lg-prompt-big.yaml` in addition to changing the values set
+for the LLM_XXX variables.
 
 #### Step 3: build container images (optional)
 
@@ -631,6 +638,10 @@ uv venv
 source .venv/bin/activate
 uv sync
 ```
+
+**NOTE:** Make sure that if you are going to deploy the quickstart after running the evaluations that
+you set the LLM_XXX variables back to those outlined in the "Deploy to OpenShift" section. It is often
+useful to use a different shell to run the evaluations to avoid having to change the settings back and forth.
 
 #### Step 2: run predefined conversation flows
 
