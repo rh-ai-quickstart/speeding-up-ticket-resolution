@@ -12,7 +12,7 @@ These components run for the standard agent platform; they are **not** ServiceNo
 |-------|------|
 | **request-manager** | Sessions, routing, APIs for inbound work |
 | **agent-service** | LangGraph agents (e.g. routing / ticket-review flows) |
-| **integration-dispatcher** | Delivers outbound replies on channels (Slack, email, webhook, …) per [INTEGRATION_GUIDE.md](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/1da6909b42b2b59bc37a8aee96189c82a332efb2/guides/INTEGRATION_GUIDE.md) |
+| **integration-dispatcher** | Delivers outbound replies on channels (Slack, email, webhook, …) per [INTEGRATION_GUIDE.md](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/d7ff1c5dee7c316f8fcd6bf563b7ce00b57ae441/guides/INTEGRATION_GUIDE.md) |
 | **PostgreSQL / pgvector** | Request and session state |
 | **Mock eventing vs Knative** | Test profile (`values-test.yaml`) vs prod eventing |
 
