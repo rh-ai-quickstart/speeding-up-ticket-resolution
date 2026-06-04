@@ -84,16 +84,9 @@ jobs:
         run: |
           kubectl config set-context --current --namespace=${{ env.E2E_NAMESPACE }}
 
-      - name: Install evaluations dependencies
-        shell: bash
-        working-directory: it-self-service-agent
-        run: |
-          make sync-evaluations
-
       - name: Run ticket laptop refresh flow evaluation
         if: always()
         shell: bash
-        working-directory: it-self-service-agent
         run: |
           make test-long-ticket-laptop-refresh
         env:
