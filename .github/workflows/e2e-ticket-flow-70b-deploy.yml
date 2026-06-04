@@ -9,7 +9,7 @@ on:
         default: 'dev'
         type: string
   schedule:
-    - cron: '0 3 * * *'  # Run daily at 3 AM UTC
+    - cron: '0 9 * * *'  # Run daily at 9 AM UTC
 
 env:
   UV_VERSION: "0.8.9"
