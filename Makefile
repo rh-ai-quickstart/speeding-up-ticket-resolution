@@ -54,8 +54,8 @@ sync-upstream-links:
 submodule-status:
 	git submodule status --recursive
 
-.PHONY: install uninstall
-install:
+.PHONY: install uninstall helm-install-ticketing
+install helm-install-ticketing:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
 	$(MAKE) -C $(SUBMODULE) helm-install-ticketing $(VERSION_ARG)
 
@@ -63,10 +63,25 @@ uninstall:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
 	$(MAKE) -C $(SUBMODULE) helm-uninstall
 
+.PHONY: helm-depend
+helm-depend:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) helm-depend
+
+.PHONY: namespace
+namespace:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) namespace
+
 .PHONY: test-short-ticket-laptop-refresh
 test-short-ticket-laptop-refresh:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
 	$(MAKE) -C $(SUBMODULE) test-short-ticket-laptop-refresh
+
+.PHONY: test-long-ticket-laptop-refresh
+test-long-ticket-laptop-refresh:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) test-long-ticket-laptop-refresh
 
 .PHONY: helm-status
 helm-status:
