@@ -53,7 +53,7 @@ A new contributor can clone with submodules, follow one Zammad install path, dep
 |------|--------|
 | Submodule clone / bump / **Current pin** | [upstream.md](upstream.md), [CONTRIBUTING.md](../CONTRIBUTING.md) |
 | CI (submodule sanity, **`make check-links`**) | [.github/workflows/ci.yml](../.github/workflows/ci.yml) |
-| Submodule bump PRs | [.github/dependabot.yml](../.github/dependabot.yml) |
+| Submodule bump PRs | [.github/workflows/nightly-submodule-bump.yml](../.github/workflows/nightly-submodule-bump.yml) |
 | Tags and release notes | [releases.md](releases.md) |
 | Root glue + maintainer checklist | [glue.md](glue.md), root **`Makefile`**, **`examples/`** |
 

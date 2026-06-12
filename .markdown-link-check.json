@@ -17,6 +17,9 @@
     },
     {
       "pattern": "^https://huggingface\\.co/"
+    },
+    {
+      "pattern": "^https://www\\.gnu\\.org/"
     }
   ],
   "retryOn429": true,

@@ -1,4 +1,4 @@
-# When Dependabot bumps it-self-service-agent, rewrite docs that pin upstream blob/tree SHAs.
+# When the nightly submodule bump workflow bumps it-self-service-agent, rewrite docs that pin upstream blob/tree SHAs.
 name: Sync upstream links (Dependabot submodule)
 
 on:
@@ -19,7 +19,8 @@ jobs:
     name: make sync-upstream-links
     runs-on: ubuntu-latest
     if: >-
-      github.actor == 'dependabot[bot]' &&
+      github.actor == 'github-actions[bot]' &&
+      startsWith(github.event.pull_request.head.ref, 'chore/nightly-submodule-bump-') &&
       github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - name: Generate GitHub App Token
@@ -57,7 +58,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [sync]
     if: >-
-      github.actor == 'dependabot[bot]' &&
+      github.actor == 'github-actions[bot]' &&
+      startsWith(github.event.pull_request.head.ref, 'chore/nightly-submodule-bump-') &&
       github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - name: Generate GitHub App Token

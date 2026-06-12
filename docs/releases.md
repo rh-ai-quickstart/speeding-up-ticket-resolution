@@ -29,6 +29,6 @@ git push origin v2026.04.17
 
 Replace the message with your actual smoke-test notes.
 
-## Dependabot submodule PRs
+## Nightly submodule bump PRs
 
-[Dependabot](../.github/dependabot.yml) may open weekly PRs that bump `it-self-service-agent`. Merge only after validating upstream changes and updating [upstream.md](upstream.md); treat tags as snapshots **after** those merges if you release often.
+The [nightly submodule bump workflow](../.github/workflows/nightly-submodule-bump.yml) may open nightly PRs that bump `it-self-service-agent`. Merge only after validating upstream changes and updating [upstream.md](upstream.md); treat tags as snapshots **after** those merges if you release often.
