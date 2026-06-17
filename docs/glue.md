@@ -4,7 +4,7 @@ This document describes **wrapper glue** (root **`Makefile`**, **`examples/`**) 
 
 ## Glue plan
 
-**Goal:** Operators can run installs from the **repository root** without memorizing paths, while **install logic remains** in [it-self-service-agent/Makefile](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/fd827ed7820ebbee10370715c76d3ad3665bb83a/Makefile).
+**Goal:** Operators can run installs from the **repository root** without memorizing paths, while **install logic remains** in [it-self-service-agent/Makefile](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/8d7da399430629feecab61326eb8b4445cf22a0a/Makefile).
 
 | Artifact | Role |
 |----------|------|
