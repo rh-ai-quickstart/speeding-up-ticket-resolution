@@ -24,7 +24,7 @@ git submodule update --init --recursive
 | Submodule path | `it-self-service-agent` |
 | Remote | `https://github.com/rh-ai-quickstart/it-self-service-agent.git` |
 | Branch policy | Advance pins from upstream **`dev`** (see [CONTRIBUTING.md](../CONTRIBUTING.md)) |
-| Pinned commit | `8d7da399430629feecab61326eb8b4445cf22a0a` (update this row when you bump) |
+| Pinned commit | `5af29a5b8780d7de448135bf45a0fda247799736` (update this row when you bump) |
 
 ## Bump the submodule (maintainers)
 
@@ -50,4 +50,4 @@ Review **`git diff`** before committing.
 
 | Wrapper / doc revision | Submodule SHA | OpenShift / OAI (tested) | Zammad (tested) |
 |------------------------|-----------------|---------------------------|-----------------|
-| Current (upstream **`dev`**) | `8d7da399430629feecab61326eb8b4445cf22a0a` | — | — |
+| Current (upstream **`dev`**) | `5af29a5b8780d7de448135bf45a0fda247799736` | — | — |
