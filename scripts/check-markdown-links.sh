@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Same file set as CI: docs/**, examples/**, repo-root *.md (not submodule / .github).
+# Same file set as CI: docs/**, repo-root *.md (not submodule / .github).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -36,7 +36,7 @@ ec=0
 while IFS= read -r -d '' f; do
   run_mlc -q -c "$CONFIG" "$f" || ec=1
 done < <( (
-  find docs examples -name '*.md' -print0
+  find docs  -name '*.md' -print0
   find . -maxdepth 1 -type f -name '*.md' -print0
 ) | sort -z )
 
