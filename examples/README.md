@@ -1,6 +1,6 @@
 # Examples (placeholders only)
 
-This directory holds **documentation and non-secret placeholders** for the ticketing path. **Install orchestration** lives in **`it-self-service-agent/`** ([`Makefile` at pinned upstream commit](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/5af29a5b8780d7de448135bf45a0fda247799736/Makefile), `helm/`).
+This directory holds **documentation and non-secret placeholders** for the ticketing path. **Install orchestration** lives in **`it-self-service-agent/`** ([`Makefile` at pinned upstream commit](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/16cd45fac5a1b1d6a49cb1532baa17e8f12823ca/Makefile), `helm/`).
 
 ## Before you use anything here
 

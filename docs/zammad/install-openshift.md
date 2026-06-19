@@ -30,9 +30,9 @@ make helm-install-ticketing NAMESPACE="${NAMESPACE}"
 
 **What to read while it runs:**
 
-- Target implementation and printed checklist: [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/5af29a5b8780d7de448135bf45a0fda247799736/Makefile) (`helm-install-ticketing`, `_helm-install-ticketing-single`, `_helm-install-ticketing-print-checklist`, `deploy-zammad`).
-- Values overlays: [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/5af29a5b8780d7de448135bf45a0fda247799736/helm/values-ticketing.yaml), [`helm/values-test.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/5af29a5b8780d7de448135bf45a0fda247799736/helm/values-test.yaml) (as referenced by that target).
-- Zammad deployment stack: [`helm/zammad/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/5af29a5b8780d7de448135bf45a0fda247799736/helm/zammad), [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/5af29a5b8780d7de448135bf45a0fda247799736/helm/values-ticketing.yaml).
+- Target implementation and printed checklist: [`Makefile`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/16cd45fac5a1b1d6a49cb1532baa17e8f12823ca/Makefile) (`helm-install-ticketing`, `_helm-install-ticketing-single`, `_helm-install-ticketing-print-checklist`, `deploy-zammad`).
+- Values overlays: [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/16cd45fac5a1b1d6a49cb1532baa17e8f12823ca/helm/values-ticketing.yaml), [`helm/values-test.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/16cd45fac5a1b1d6a49cb1532baa17e8f12823ca/helm/values-test.yaml) (as referenced by that target).
+- Zammad deployment stack: [`helm/zammad/`](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/16cd45fac5a1b1d6a49cb1532baa17e8f12823ca/helm/zammad), [`helm/values-ticketing.yaml`](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/16cd45fac5a1b1d6a49cb1532baa17e8f12823ca/helm/values-ticketing.yaml).
 
 Expect **15+ minutes** on first deploy (Zammad dependencies). Watch pods: `kubectl get pods -n "${NAMESPACE}" -w`.
 
