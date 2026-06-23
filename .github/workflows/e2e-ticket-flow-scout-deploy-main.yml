@@ -1,0 +1,128 @@
+name: E2E Ticket Flow (main) - Scout 17b Deploy, 70b Eval
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref (branch, tag, or SHA) to checkout'
+        required: false
+        default: 'main'
+        type: string
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  UV_VERSION: "0.8.9"
+  PYTHON_VERSION: "3.12"
+  E2E_NAMESPACE: "test"
+
+jobs:
+  e2e-tests:
+    name: Scout 17b deploy, 70b eval (10 conversations)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate LLM_API_TOKEN_INFERENCE_SCOUT secret
+        shell: bash
+        env:
+          LLM_API_TOKEN: ${{ secrets.LLM_API_TOKEN_INFERENCE_SCOUT }}
+        run: |
+          if [ -z "${LLM_API_TOKEN}" ]; then
+            echo "LLM_API_TOKEN_INFERENCE_SCOUT secret is missing or empty. Set it in repository or organization secrets."
+            exit 1
+          fi
+
+      - name: Validate LLM_API_TOKEN_EVAL_70B secret
+        shell: bash
+        env:
+          LLM_API_TOKEN: ${{ secrets.LLM_API_TOKEN_EVAL_70B }}
+        run: |
+          if [ -z "${LLM_API_TOKEN}" ]; then
+            echo "LLM_API_TOKEN_EVAL_70B secret is missing or empty. Set it in repository or organization secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || '' }}
+          submodules: recursive
+
+      - name: Prepare Runner
+        uses: ./it-self-service-agent/.github/actions/prepare-runner
+        with:
+          swap-storage: 'false'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Local Dependencies
+        shell: bash
+        working-directory: it-self-service-agent
+        run: |
+          make oc
+          echo "$GITHUB_WORKSPACE/it-self-service-agent/bin" >> $GITHUB_PATH
+
+      - name: Initialize cluster and deploy application
+        uses: ./it-self-service-agent/.github/actions/kind
+        with:
+          namespace: ${{ env.E2E_NAMESPACE }}
+          llm: ${{ vars.LLM_INFERENCE_SCOUT }}
+          llm_id: ${{ vars.LLM_ID_INFERENCE_SCOUT }}
+          llm_url: ${{ vars.LLM_URL_INFERENCE_SCOUT }}
+          helm_target: "helm-install-ticketing"
+          extra_helm_args: "--set requestManagement.networkPolicies.platform=kind --set requestManagement.requestManager.externalAccess.enabled=false --set requestManagement.integrationDispatcher.externalAccess.enabled=false --set ticketingZammad.externalRoute.enabled=false"
+        env:
+          LLM_API_TOKEN: ${{ secrets.LLM_API_TOKEN_INFERENCE_SCOUT }}
+          LG_PROMPT_TICKET_LAPTOP_REFRESH: /app/agent-service/config/lg-prompts/ticket-laptop-refresh-lg-prompt-small-scout.yaml
+          ZAMMAD_DEMO_SITE_ENABLED: "false"
+
+      - name: Set default namespace on Kind
+        shell: bash
+        run: |
+          kubectl config set-context --current --namespace=${{ env.E2E_NAMESPACE }}
+
+      - name: Run ticket laptop refresh flow evaluation
+        if: always()
+        shell: bash
+        run: |
+          make test-long-ticket-laptop-refresh
+        env:
+          LLM_URL: ${{ vars.LLM_URL_EVAL_70B }}
+          LLM_API_TOKEN: ${{ secrets.LLM_API_TOKEN_EVAL_70B }}
+
+      - name: Inspect Cluster - Self-Service Agent
+        if: failure()
+        uses: ./it-self-service-agent/.github/actions/inspect
+        with:
+          artifactPrefix: self-service-agent-scout-deploy-main
+
+      - name: Create evaluations tarball
+        if: always()
+        shell: bash
+        run: |
+          if [ -d "it-self-service-agent/evaluations/results" ]; then
+            tar -czf evaluations-results-scout-deploy-main-${{ github.run_id }}.tar.gz -C it-self-service-agent/evaluations results/
+            echo "Tarball created successfully from it-self-service-agent/evaluations/results/"
+            ls -lh evaluations-results-scout-deploy-main-${{ github.run_id }}.tar.gz
+          else
+            echo "evaluations/results directory not found, creating empty marker"
+            mkdir -p it-self-service-agent/evaluations/results
+            echo "No evaluation results were generated" > it-self-service-agent/evaluations/results/README.txt
+            tar -czf evaluations-results-scout-deploy-main-${{ github.run_id }}.tar.gz -C it-self-service-agent/evaluations results/
+          fi
+
+      - name: Upload evaluations artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluations-results-scout-deploy-main-${{ github.run_id }}
+          path: evaluations-results-scout-deploy-main-${{ github.run_id }}.tar.gz
+          retention-days: 30
+          if-no-files-found: warn
