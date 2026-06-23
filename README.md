@@ -343,28 +343,12 @@ oc new-project $NAMESPACE
 make install NAMESPACE=$NAMESPACE
 ```
 
-**Production mode (Knative Eventing + Kafka):** use when the cluster meets the
-[Production Mode prerequisites](#minimum-software-requirements). This keeps the Zammad ticketing
-deployment from `make install` above, but routes events through Kafka instead of the mock eventing
-service. There is no separate Makefile target for ticketing + prod; pass `KNATIVE_EVENTING=true`
-to the existing ticketing install (see upstream
-[Deployment Mode Guide](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/676c30d4fa024c329e4bc7d0698872f43d4e8db8/guides/DEPLOYMENT_MODE_GUIDE.md)):
+**Production mode:** the quickstart supports deployment with Knative Eventing and Kafka (instead of the mock eventing) for a more production ready deployment. Use when the cluster meets the [Production Mode prerequisites](#minimum-software-requirements). There is no separate Makefile target to enable this mode; instead pass `KNATIVE_EVENTING=true` to the existing ticketing install as shown below:
 
 ```bash
 make install NAMESPACE=$NAMESPACE KNATIVE_EVENTING=true \
   EXTRA_HELM_ARGS="-f helm/values-production.yaml"
 ```
-
-Or from inside the submodule:
-
-```bash
-cd it-self-service-agent
-make helm-install-ticketing NAMESPACE=$NAMESPACE KNATIVE_EVENTING=true \
-  EXTRA_HELM_ARGS="-f helm/values-production.yaml"
-```
-
-Use the same `NAMESPACE` and LLM variables from Step 2. Do **not** use `helm-install-prod` for this
-quickstart — that target deploys the core stack only and does not install Zammad.
 
 The deployment will take about 5-6 minutes and a number of URLs will be
 displayed once the deployment is complete.
