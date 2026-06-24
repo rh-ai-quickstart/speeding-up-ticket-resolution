@@ -343,10 +343,11 @@ oc new-project $NAMESPACE
 make install NAMESPACE=$NAMESPACE
 ```
 
-**Production mode:** the quickstart supports deployment with Knative Eventing and Kafka (instead of the mock eventing) for a more production ready deployment. Use when the cluster meets the [Production Mode prerequisites](#minimum-software-requirements). There is no separate Makefile target to enable this mode; instead pass `KNATIVE_EVENTING=true` to the existing ticketing install as shown below:
+**Production mode:** the quickstart supports deployment with Knative Eventing and Kafka (instead of the mock eventing) for a more production ready deployment. Use when the cluster meets the [Production Mode prerequisites](#minimum-software-requirements). There is no separate Makefile target to enable this mode; instead pass `KNATIVE_EVENTING=true` to `helm-install-ticketing` as shown below:
 
 ```bash
-make install NAMESPACE=$NAMESPACE KNATIVE_EVENTING=true \
+make helm-install-ticketing NAMESPACE=$NAMESPACE \
+  KNATIVE_EVENTING=true \
   EXTRA_HELM_ARGS="-f helm/values-production.yaml"
 ```
 
