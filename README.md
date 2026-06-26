@@ -38,6 +38,7 @@ Transform service delivery by accelerating ticket resolution and reducing suppor
   - [Setting up guardrails (Optional)](#setting-up-guardrails-optional)
   - [Follow the flow with tracing (Optional)](#follow-the-flow-with-tracing-optional)
   - [Session level observability with Langfuse (Optional)](#session-level-observability-with-langfuse-optional)
+  - [Production mode deployment (Optional)](#production-mode-deployment-optional)
   - [What you've accomplished](#what-youve-accomplished)
   - [Delete](#delete)
 - [Tags](#tags)
@@ -343,14 +344,6 @@ oc new-project $NAMESPACE
 make install NAMESPACE=$NAMESPACE
 ```
 
-**Production mode:** the quickstart supports deployment with Knative Eventing and Kafka (instead of the mock eventing) for a more production ready deployment. Use when the cluster meets the [Production Mode prerequisites](#minimum-software-requirements). There is no separate Makefile target to enable this mode; instead pass `KNATIVE_EVENTING=true` to `helm-install-ticketing` as shown below:
-
-```bash
-make helm-install-ticketing NAMESPACE=$NAMESPACE \
-  KNATIVE_EVENTING=true \
-  EXTRA_HELM_ARGS="-f helm/values-production.yaml"
-```
-
 The deployment will take about 5-6 minutes and a number of URLs will be
 displayed once the deployment is complete.
 
@@ -359,7 +352,6 @@ displayed once the deployment is complete.
 - ✓ All pods running
 - ✓ Routes created
 - ✓ URL to demo site is displayed
-- ✓ **Production mode only:** Knative broker class is `Kafka`, all 10 triggers are `Ready`, and no `mock-eventing` pod is running (`oc get broker,triggers -n $NAMESPACE`)
 
 #### Step 5: verify deployment
 
@@ -1231,6 +1223,18 @@ Once you are done, clean up by running:
 ```
 export ENABLE_LANGFUSE=false
 make uninstall NAMESPACE=$NAMESPACE
+```
+
+---
+
+### Production mode deployment (Optional)
+
+**Production mode:** the quickstart supports deployment with Knative Eventing and Kafka (instead of the mock eventing) for a more production ready deployment. Use when the cluster meets the [Production Mode prerequisites](#minimum-software-requirements). There is no separate Makefile target to enable this mode; instead pass `KNATIVE_EVENTING=true` to `helm-install-ticketing` as shown below:
+
+```bash
+make helm-install-ticketing NAMESPACE=$NAMESPACE \
+  KNATIVE_EVENTING=true \
+  EXTRA_HELM_ARGS="-f helm/values-production.yaml"
 ```
 
 ---
