@@ -38,6 +38,7 @@ Transform service delivery by accelerating ticket resolution and reducing suppor
   - [Setting up guardrails (Optional)](#setting-up-guardrails-optional)
   - [Follow the flow with tracing (Optional)](#follow-the-flow-with-tracing-optional)
   - [Session level observability with Langfuse (Optional)](#session-level-observability-with-langfuse-optional)
+  - [Production mode deployment (Optional)](#production-mode-deployment-optional)
   - [What you've accomplished](#what-youve-accomplished)
   - [Delete](#delete)
 - [Tags](#tags)
@@ -1222,6 +1223,18 @@ Once you are done, clean up by running:
 ```
 export ENABLE_LANGFUSE=false
 make uninstall NAMESPACE=$NAMESPACE
+```
+
+---
+
+### Production mode deployment (Optional)
+
+**Production mode:** the quickstart supports deployment with Knative Eventing and Kafka (instead of the mock eventing) for a more production ready deployment. Use when the cluster meets the [Production Mode prerequisites](#minimum-software-requirements). There is no separate Makefile target to enable this mode; instead pass `KNATIVE_EVENTING=true` to `helm-install-ticketing` as shown below:
+
+```bash
+make helm-install-ticketing NAMESPACE=$NAMESPACE \
+  KNATIVE_EVENTING=true \
+  EXTRA_HELM_ARGS="-f helm/values-production.yaml"
 ```
 
 ---
