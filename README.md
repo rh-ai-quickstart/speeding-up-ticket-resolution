@@ -279,7 +279,7 @@ For first deployment, we recommend **Testing Mode (Mock Eventing)**:
 - Tests event-driven patterns
 - Simpler than production infrastructure
   
-For detailed information about deployment modes, see the [Deployment Mode Guide](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/guides/DEPLOYMENT_MODE_GUIDE.md).
+For detailed information about deployment modes, see the [Deployment Mode Guide](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/guides/DEPLOYMENT_MODE_GUIDE.md).
 
 #### Step 2: set required environment variables
 
@@ -492,7 +492,7 @@ handled by the general agent the resolution is either the ticket being
 closed or being escalated for further human review.
 
 If you want to look at the prompt for the general agent it is in
-[ticket-general-lg-prompt-small.yaml](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/agent-service/config/lg-prompts/ticket-general-lg-prompt-small.yaml).
+[ticket-general-lg-prompt-small.yaml](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/agent-service/config/lg-prompts/ticket-general-lg-prompt-small.yaml).
 
 **You should now:**
 - ✓ be able to create a ticket and interact with the general agent through Zammad
@@ -571,15 +571,15 @@ and contains the following files:
 The prompt for the agent is in one of these two depending on which model
 you deployed with:
 
-* Llama 3 70b - [ticket-laptop-refresh-lg-prompt-big.yaml](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/agent-service/config/lg-prompts/ticket-laptop-refresh-lg-prompt-big.yaml)
-* Llama 4 scout 17b - [ticket-laptop-refresh-lg-prompt-small.yaml](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/agent-service/config/lg-prompts/ticket-laptop-refresh-lg-prompt-small.yaml)
+* Llama 3 70b - [ticket-laptop-refresh-lg-prompt-big.yaml](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/agent-service/config/lg-prompts/ticket-laptop-refresh-lg-prompt-big.yaml)
+* Llama 4 scout 17b - [ticket-laptop-refresh-lg-prompt-small.yaml](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/agent-service/config/lg-prompts/ticket-laptop-refresh-lg-prompt-small.yaml)
 
 The prompt for 70b model uses the "big prompt" approach while the prompt for the 17b model uses the "small prompt"
 approach to make it easier for a smaller model to handle it. You can read more about the "big" and "small" prompt
 approaches and how they leverage [LangGraph](https://github.com/langchain-ai/langgraph) in:
 
 * [Prompt engineering: Big vs. small prompts for AI agents](https://developers.redhat.com/articles/2026/02/23/prompt-engineering-big-vs-small-prompts-ai-agents)
-* [PROMPT_CONFIGURATION_GUIDE.md](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/guides/PROMPT_CONFIGURATION_GUIDE.md)
+* [PROMPT_CONFIGURATION_GUIDE.md](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/guides/PROMPT_CONFIGURATION_GUIDE.md)
 
 **You should now:**
 - ✓ know how to interact with the laptop specialist agent through Zammad
@@ -619,7 +619,7 @@ The evaluation framework validates agent behavior against business requirements 
 
 The evaluation framework addresses these challenges by combining predefined test conversations with AI-generated scenarios, applying metrics to assess both conversational quality and business process compliance. This was a crucial tool in the development of this quickstart, enabling PR validation, model comparison, prompt evaluation, and identification of common conversation failures.
 
-This section walks you through generating conversations with the deployed system and evaluating them. More detailed information on the evaluation system is in the [Evaluation Framework Guide](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/guides/EVALUATIONS_GUIDE.md).
+This section walks you through generating conversations with the deployed system and evaluating them. More detailed information on the evaluation system is in the [Evaluation Framework Guide](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/guides/EVALUATIONS_GUIDE.md).
 
 #### Step 1: configure evaluation environment
 
@@ -660,7 +660,7 @@ python run_conversations.py --flow ticket_unrelated
 ```
 
 This runs the pre-defined conversations in
-[it-self-service-agent/evaluations/flows/ticket_unrelated/conversations/](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/61eee6ebbbe372e76b859afb497d07878852774e/evaluations/flows/ticket_unrelated/conversations/).
+[it-self-service-agent/evaluations/flows/ticket_unrelated/conversations/](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/2ae8019ae8dc8912794fea0faf4fe47919c2388c/evaluations/flows/ticket_unrelated/conversations/).
 
 **Expected outcome:**
 - ✓ Conversations executed against deployed agent
@@ -727,7 +727,7 @@ cat results/ticket_unrelated/deep_eval_results/deepeval_all_results.json
 - **No errors reported by agent**: Did the agent report any explicit technical or system errors (HTTP error codes, tool call failures, stack traces, etc.)?
 - **Correct conversation metadata**: Does the conversation metadata (ticket state, owner, group) match the expected values at each point in the conversation?
 
-Each of these metrics is defined in [it-self-service-agent/evaluations/flows/ticket_unrelated/metrics.py](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/evaluations/flows/ticket_unrelated/metrics.py)
+Each of these metrics is defined in [it-self-service-agent/evaluations/flows/ticket_unrelated/metrics.py](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/evaluations/flows/ticket_unrelated/metrics.py)
 Most of the metrics tell a judge LLM how to evaluate the conversation. As an example:
 
 ```python
@@ -753,7 +753,7 @@ python evaluate.py --check --flow ticket_unrelated
 ```
 
 which runs known bad conversations to validate that they are flagged as bad by the metrics. The known bad conversations are in
-[it-self-service-agent/evaluations/flows/ticket_unrelated/known_bad_conversations/](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/61eee6ebbbe372e76b859afb497d07878852774e/evaluations/flows/ticket_unrelated/known_bad_conversations/). An example of a failure
+[it-self-service-agent/evaluations/flows/ticket_unrelated/known_bad_conversations/](https://github.com/rh-ai-quickstart/it-self-service-agent/tree/2ae8019ae8dc8912794fea0faf4fe47919c2388c/evaluations/flows/ticket_unrelated/known_bad_conversations/). An example of a failure
 would be:
 
 ```bash
@@ -830,7 +830,7 @@ In this quickstart, guardrails can be enabled to provide content moderation for 
 
 When choosing specially trained guardrail models ensure that you chose one which is appropriate for your use case. As an example we've previously found that general models like Llama Guard may flag too many categories by default on IT service related agentic flows. You can read more about that in: [Guardrails: Enterprise safety shields with Llama Stack](https://developers.redhat.com/articles/2026/05/04/guardrails-enterprise-safety-shields-llama-stack).
 
-The guardrails deployed are defined in [it-self-service-agent/helm/nemo-guardrails/templates/configmap.yaml](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/helm/nemo-guardrails/templates/configmap.yaml). The quickstart uses the capability provided by NeMo guardrails to define checks with an LLM prompt. Two self-checks are active one which checks user input message and one that checks the agents response:
+The guardrails deployed are defined in [it-self-service-agent/helm/nemo-guardrails/templates/configmap.yaml](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/helm/nemo-guardrails/templates/configmap.yaml). The quickstart uses the capability provided by NeMo guardrails to define checks with an LLM prompt. Two self-checks are active one which checks user input message and one that checks the agents response:
 
 ```bash
       - task: self_check_input
@@ -1118,7 +1118,7 @@ The system implements end-to-end trace [context propagation](https://opentelemet
 
 All operations share the same trace ID, creating a complete distributed trace.
 
-**For detailed implementation information** including context propagation mechanisms, decorator usage, and troubleshooting, see the [Tracing Implementation Documentation](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/61eee6ebbbe372e76b859afb497d07878852774e/docs/TRACING_IMPLEMENTATION.md).
+**For detailed implementation information** including context propagation mechanisms, decorator usage, and troubleshooting, see the [Tracing Implementation Documentation](https://github.com/rh-ai-quickstart/it-self-service-agent/blob/2ae8019ae8dc8912794fea0faf4fe47919c2388c/docs/TRACING_IMPLEMENTATION.md).
 
 **You should now be able to:**
 - ✓ Set up observability infrastructure (Jaeger or Tempo)
