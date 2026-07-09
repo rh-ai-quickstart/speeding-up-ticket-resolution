@@ -58,12 +58,12 @@ This quickstart guide is designed for:
 
 ### The business case for AI-driven ticket management
 
-Many businesses manage requests through ticket management systems in order to ensure requests are tracked
-and addressed within committed SLAs. In addition, they value the insight they can gain by looking at common
-requests and resolutions over time. For this reason, many organizations would like to integrate AI directly
-into their ticket systems, rather than deploying a separate chatbot.
+Many businesses manage requests through ticket management systems to ensure they are tracked
+and addressed within committed service level agreements (SLAs). In addition, these systems provide valuable insights 
+into common requests and resolutions over time. For this reason, many organizations prefer to integrate AI directly
+into their existing ticket management systems rather than deploying a standalone chatbot.
 
-Generative AI agents can participate directly in ticket threads — gathering information, drafting responses,
+Generative AI agents can engage directly in ticket threads — gathering information, drafting responses,
 and resolving requests — in ways rule-based automation cannot. The key value propositions are:
 
 **For employees submitting requests**
@@ -90,16 +90,15 @@ and resolving requests — in ways rule-based automation cannot. The key value p
 
 ### What this quickstart provides
 
-This quickstart provides the framework, components and knowledge to accelerate the process of introducing
-AI into your ticketing system. Many AI-based ticketing implementations can share common
-components across an enterprise. The addition of agent configuration files, along with additional tools,
+This quickstart provides the framework, components, and knowledge required to accelerate the integration of
+AI into your ticketing system. Across an enterprise, multiple AI-based ticketing solutions can reuse the same underlying components. The addition of agent configuration files, along with additional tools,
 knowledge bases, and evaluations tailors the quickstart for a specific use case. Often no code
 changes to the common components will be required to add support for an additional use case.
 
 ### What you'll build
 
-The quickstart provides implementations of the common components along with the process specific
-pieces needed to demonstrate AI integrated with a ticket system, all running on OpenShift AI.
+The quickstart provides implementations of the common components, along with the process-specific
+elements needed to demonstrate an AI-integrated ticket system running on OpenShift AI.
 
 Time to complete: 60-180 minutes (depending on deployment mode)
 
@@ -125,7 +124,6 @@ Throughout this quickstart, you'll gain hands-on experience with modern AI and c
 - **[LangGraph](https://langchain-ai.github.io/langgraph/)** - State machine framework for managing agent conversations and workflows
 - **[MCP (Model Context Protocol) Servers](https://modelcontextprotocol.io/)** - Standardized interface for connecting AI agents to external systems
 - **[RAG based Knowledge Bases](https://www.redhat.com/en/topics/ai/what-is-retrieval-augmented-generation)** - Vector-based retrieval for policy documents and process guidelines using OGX vector stores
-- **[Llama 3](https://llama.meta.com/)** - 17B parameter language model for agent reasoning
 
 **Observability & Evaluation:**
 - **[OpenTelemetry](https://opentelemetry.io/)** - Distributed tracing for monitoring complex agent interactions
@@ -146,9 +144,9 @@ This quickstart is built as an extension to the reusable components in the [it-s
 
 ![Demo site page](docs/images/architecture-ticket.png)
 
-For details on the core components including communication channels, the request manager, and the agent service refer to the detailed documentation in the it-self-service-agent quickstart.
+For details on the core components including communication channels, the request manager, and the agent service refer to the detailed documentation in the [it-self-service-agent](https://github.com/rh-ai-quickstart/it-self-service-agent) quickstart.
 
-In addition to the base components, the quickstart includes an evaluation framework and integration with OpenTelemetry support in OpenShift AI for observability.
+In addition to the base components, the quickstart includes an evaluation framework, and integration with OpenTelemetry support in OpenShift AI for observability.
 
 **Why Evaluations Matter:**
 
@@ -837,7 +835,7 @@ These targets automatically:
 
 ### Setting up guardrails (Optional)
 
-Depending on the model you deploy with, you may need guardrails to protect the agent from [prompt injection attacks](https://www.ibm.com/think/topics/prompt-injection), and ensure it only answers appropriate questions and/or responds in an appropriate manner (no swearing etc.)
+Depending on the model you deploy with, you may need guardrails to protect the agent from [prompt injection attacks](https://www.ibm.com/think/topics/prompt-injection), and ensure it only answers appropriate questions and/or responds in an appropriate manner.This can include filtering for harmful content such as hate, abuse, and profanity (HAP), as well as preventing inappropriate or unsafe responses.
 
 In this quickstart, guardrails can be enabled to provide content moderation for AI agent interactions, validating user input and agent responses against safety policies using NeMo Guardrails deployed through OpenShift AI [Trusty AI](https://www.redhat.com/en/blog/introduction-trustyai). Nemo Guardrails provides a fully configurable framework that lets you run specially trained guardrail models or to define your own guardrail checks as shown in this quickstart. You can read more about Nemo Guardrails in [Enabling AI safety with Guardrails](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4/pdf/enabling_ai_safety_with_guardrails/Red_Hat_OpenShift_AI_Self-Managed-3.4-Enabling_AI_safety_with_Guardrails-en-US.pdf).
 
