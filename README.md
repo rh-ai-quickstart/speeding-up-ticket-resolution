@@ -37,7 +37,7 @@ Transform service delivery by accelerating ticket resolution and reducing suppor
     - [Step 7: run complete evaluation pipeline](#step-7-run-complete-evaluation-pipeline)
   - [Setting up guardrails (Optional)](#setting-up-guardrails-optional)
   - [Follow the flow with tracing (Optional)](#follow-the-flow-with-tracing-optional)
-  - [Session level observability with Langfuse (Optional)](#session-level-observability-with-langfuse-optional)
+  - [Session level observability with MLflow (Optional)](#session-level-observability-with-mlflow-optional)
   - [Production mode deployment (Optional)](#production-mode-deployment-optional)
   - [Understanding the MCP server used in the quickstart](#understanding-the-mcp-server-used-in-the-quickstart)
   - [Experimenting with different models](#experimenting-with-different-models)
@@ -111,7 +111,7 @@ By the end of this quickstart, you will have:
 - Completed evaluation runs demonstrating agent quality and business requirements
 - (Optional) Guardrails for content moderation
 - (Optional) Understanding of distributed tracing for monitoring and troubleshooting
-- (Optional) Langfuse for session-level observability of multi-turn conversations
+- (Optional) MLflow for session-level observability of multi-turn conversations
 - Understanding of how to customize for your own use cases
 
 #### Key technologies you'll learn
@@ -119,11 +119,12 @@ By the end of this quickstart, you will have:
 Throughout this quickstart, you'll gain hands-on experience with modern AI and cloud-native technologies including:
 
 **AI & LLM Technologies:**
-- **[Red Hat OpenShift AI](https://www.redhat.com/en/products/ai/openshift-ai) - flexible hybrid cloud platform to deploy open weight models and autonomous agents at scale. 
-- **[OGX](https://github.com/ogx-ai/ogx)** - AI inference platform
-- **[LangGraph](https://langchain-ai.github.io/langgraph/)** - State machine framework for managing agent conversations and workflows
+- **[Red Hat OpenShift AI](https://www.redhat.com/en/products/ai/openshift-ai)** - flexible hybrid cloud platform to deploy open weight models and autonomous agents at scale. 
+- **[OGX](https://github.com/ogx-ai/ogx)** - Agentic API server for building AI applications. OpenAI-compatible. Any model, any infrastructure.
+- **[MLflow](https://github.com/mlflow/mlflow)** - AI engineering platform for agents, LLMs, and ML models.
 - **[MCP (Model Context Protocol) Servers](https://modelcontextprotocol.io/)** - Standardized interface for connecting AI agents to external systems
 - **[RAG based Knowledge Bases](https://www.redhat.com/en/topics/ai/what-is-retrieval-augmented-generation)** - Vector-based retrieval for policy documents and process guidelines using OGX vector stores
+- **[LangGraph](https://langchain-ai.github.io/langgraph/)** - State machine framework for managing agent conversations and workflows
 
 **Observability & Evaluation:**
 - **[OpenTelemetry](https://opentelemetry.io/)** - Distributed tracing for monitoring complex agent interactions
@@ -1135,100 +1136,101 @@ All operations share the same trace ID, creating a complete distributed trace.
 - ✓ View and analyze distributed traces across all components
 - ✓ Identify performance bottlenecks in request flows
 
-### Session level observability with Langfuse (Optional)
+### Session level observability with MLflow (Optional)
 
 The earlier section on OpenTelemetry integration showed you how to capture traces for each
 request/response turn in a conversation. However, viewing these individual traces doesn't easily
-show you the complete multi-turn conversation flow. This is where tools like
-[Langfuse](https://github.com/langfuse/langfuse) excel—they're specifically designed for
+show you the complete multi-turn conversation flow. This is where the OpenShift AI integration of
+[MLflow](https://github.com/mlflow/mlflow) excels—it's specifically designed for
 session-level observability of complete conversations.
 
-Ideally, these tools would consume the OpenTelemetry traces we're already collecting. Unfortunately,
-most session observability tools today require their own custom instrumentation.
-
-In the case of Langfuse, for example, while it uses OpenTelemetry to capture information, the
-application must be instrumented specifically for Langfuse in order to view traces easily.
-
-First, deploy with Langfuse enabled:
+First, deploy with MLflow enabled:
 
 ```bash
-export ENABLE_LANGFUSE=true
+export ENABLE_MLFLOW=true
 make uninstall NAMESPACE=$NAMESPACE
 make install NAMESPACE=$NAMESPACE
 ```
 
-You will notice that an additional link is provided once the deployment is completed.
-It will look something like this:
+Once the deployment is complete, open MLflow by selecting the box made up of nine dots at the top
+right of the OpenShift console and then select the option titled `MLflow` under OpenShift Managed Services:
+
+![MLflow link](docs/images/mlflow-link.png)
+
+Next use the "Select workspace" selection tool to set the namespace to which you have deployed:
+
+
+![MLflow select namespace](docs/images/mlflow-select-workspace.png)
+
+That will take you to the home page which should list `self-service-agent-YYYYMMDD-HHMM` as one
+of the recent experiments:
+
+![MLflow home](docs/images/mlflow-home.png)
+
+That experiment was created when you deployed the quickstart. Each time you deploy the
+quickstart a new experiment will be created. If you select the experiment for the
+self-service-agent you will see that there are no traces yet:
+
+
+![MLflow empty experiment](docs/images/mlflow-empty-experiment.png)
+
+Next, use the demo dashboard to log in as Alice and create two different tickets
+with the general agent and make sure to have at least 2-3 messages back and forth
+with the agent in each one.
+
+Once the two conversations are generated, go back to the MLflow experiment page and select Traces under
+Observability:
+
+
+![MLflow traces](docs/images/mlflow-traces.png)
+
+You should see a number of traces. To make it easier to see the traces for each of the tickets you created
+select "Group by session" in the upper right part of the page:
+
+
+![MLflow sessions 1](docs/images/mlflow-session-1.png)
+
+You will see two sessions for each of the tickets. The first one is with the ticket review agent which
+determines which specialist agent the ticket should be routed to and the second one is the session with the
+specialist agent. If you followed the instructions, the ones with the ticket review agent will show the last
+response being `GENERAL_SUPPORT_TAGGED`.
+
+You can see the turns for each session by clicking on the `>` symbol to the left of a trace:
+
+
+![MLflow sessions 2](docs/images/mflow-sessions-2.png)
+
+You can see the details for a specific trace by selecting the oval with the turn name (for example turn 1):
+
+
+![MLflow sessions 3](docs/images/mflow-sessions-3.png)
+
+From that page you can get even more detail by selecting `View full trace` and then selecting one of the
+Responses in the turn. That will show you the full details of the call that was made to the Responses API
+by the agent including the input message, tool calls, the output message and lots of other information:
+
+
+![MLflow sessions 4](docs/images/mflow-sessions-4.png)
+
+Instead of using the traces view you can also go directly to the sessions using the sessions option
+under traces where you can also expand to see the turns:
+
+![MLflow sessions 5](docs/images/mlflow-sessions-5.png)
+
+You can now experiment by drilling into the detail for the different sessions and associated traces. We
+think you will find that MLflow has done a good job of capturing all of the information for the sessions
+with the agent and making it available so you can review how the agent interacted on each ticket.
+
+One thing to note is that if you turn on the column for the `User` the user name will show as something like
+`alice.johnson@company.com-3`. The first part is the email for the user who created the ticket and the second part
+after the dash is the ticket number:
+
+![MLflow sessions 6](docs/images/mlfow-sessions-6.png)
+
+Once you are done experimenting, you can clean up by running:
 
 ```
-Langfuse URL: https://self-service-agent-langfuse-{your cluster}
-```
-
-Follow that link, and you should see a login screen that looks like the following:
-
-![Langfuse login](docs/images/langfuse-login.png)
-
-Log in with
-
-* **email:** admin@example.com
-* **password:** langgraph_password
-
-and then select "Go to project" under the "Self Service Agent" organization:
-
-![Langfuse organization](docs/images/langfuse-organization.png)
-
-At this point, you will see that there are zero traces. Next, use the demo dashboard to log in as Alice
-and create two different tickets with the general agent and make sure to have at
-least 2-3 messages back and forth with the agent in each one.
-
-Once the two conversations are generated, select the `Tracing` option under the Observability
-section:
-
-![Langfuse traces](docs/images/langfuse-traces-1-ticket.png)
-
-You should now see a number of traces. Each of these traces will be for one of
-the turns (user question, agent answer)  on the tickets.
-
-Select one of the traces. This will show you more detailed information
-for the trace including the LangGraph graph and the full message history
-up to the point where that trace was captured.
-
-![Langfuse trace](docs/images/langfuse-tracing-2-ticket.png)
-
-The information, however, will only be for one of the traces in the multi-turn
-conversation. Now, select the Sessions entry under the Observability section:
-
-![Langfuse sessions](docs/images/langfuse-sessions-1-ticket.png)
-
-Of particular interest is that we can see which user a session was associated
-with as a quick way to find sessions that may be related to issues reported by end users.
-For this quickstart the username tracked in this system is the email for the user plus
-the zammad ticket number. So for example if the URL to the ticket in Zammad was:
-
-```text
-https://ssa-zammad-midawson.apps.ai-dev02.kni.syseng.devcluster.openshift.com/#ticket/zoom/3
-```
-
-and the user was Alice, the user id would be `alice.johnson@company.com-3`, allowing us to
-easily trace the session shown in Langfuse back to the ticket in Zammad.
-
-Select one of the sessions. This will show you all of the traces associated with
-a ticket and allow you to dig into the details for each of the traces. At this point,
-we have the full picture of the multi-turn conversation between the
-user and the agent
-
-![Langfuse session](docs/images/langfuse-sessions-2-ticket.png)
-
-If you generate new conversations, traces will be shown in the UI in real-time
-so you can follow a "live" session if a user is still actively interacting with the agent through the ticket.
-
-You can now explore the rest of the Langfuse UI to see what kinds of information
-you can get on conversations after they have run.
-
-Once you are done, clean up by running:
-
-```
-export ENABLE_LANGFUSE=false
+unset ENABLE_MLFLOW
 make uninstall NAMESPACE=$NAMESPACE
 ```
 
@@ -1341,7 +1343,7 @@ Congratulations! By completing this quickstart, you have:
 
 **Gained visibility into agent behaviour (Optional):**
 - ✓ Set up distributed tracing with OpenTelemetry and Jaeger to follow requests end-to-end across all components
-- ✓ Enabled Langfuse for session-level observability of complete multi-turn conversations
+- ✓ Enabled MLflow for session-level observability of complete multi-turn conversations
 
 ### Delete
 
