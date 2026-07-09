@@ -15,7 +15,7 @@ When creating a tag, note the **upstream submodule SHA** this wrapper was tested
 
 ```text
 ticket-resolution-agent v2026.04.17
-  submodule it-self-service-agent @ 2e26fd3f0912cbfcb2e265da43a1968cd6ecd4a4
+  submodule it-self-service-agent @ 23c567d71f45eb303d294b4f2eaf5b2389672125
   optional: OpenShift / OAI / Zammad versions validated
 ```
 
