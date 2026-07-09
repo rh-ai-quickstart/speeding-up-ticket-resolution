@@ -1250,6 +1250,8 @@ make helm-install-ticketing NAMESPACE=$NAMESPACE \
 
 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard that provides a uniform interface for connecting AI agents to external systems and tools. Rather than embedding API-specific logic directly into each agent, MCP servers act as lightweight adapters that expose a set of named, callable tools — letting agents interact with external systems without needing to know the underlying API details.
 
+OpenShift AI makes it easy to deploy MCP servers as containers alongside your AI workloads, with networking policies that restrict access to authorized services only.
+
 This quickstart builds on the [basher83/Zammad-MCP](https://github.com/basher83/Zammad-MCP) open source MCP server, wrapping and extending it to add key integration points for user identity and ticket handling safety rather than building from scratch. The tools available to the agents include:
 
 - **Look up user information** — retrieve a user's current laptop details (age, region) from their Zammad record
