@@ -1,0 +1,268 @@
+name: Image Deploy Test (dev) - Pull & Verify All Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref (branch, tag, or SHA) to checkout'
+        required: false
+        default: 'dev'
+        type: string
+  schedule:
+    - cron: '0 11 * * *'  # Run daily at 11 AM UTC
+
+env:
+  UV_VERSION: "0.8.9"
+  PYTHON_VERSION: "3.12"
+  E2E_NAMESPACE: "test"
+  CONTAINER_TOOL: "docker"
+
+jobs:
+  pull-images:
+    name: Pull all images from registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || 'dev' }}
+          submodules: recursive
+
+      - name: Pull all images
+        shell: bash
+        run: |
+          make pull-all-images
+
+      - name: List pulled images
+        shell: bash
+        run: |
+          echo "--- Pulled images ---"
+          docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+
+  image-security-scan:
+    name: Security scan images (Trivy)
+    runs-on: ubuntu-latest
+    needs: pull-images
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || 'dev' }}
+          submodules: recursive
+
+      - name: Pull all images
+        shell: bash
+        run: |
+          make pull-all-images
+
+      # Pinned to SHA due to trivy-action supply chain compromise (March 2026).
+      # See: https://github.com/aquasecurity/trivy/security/advisories/GHSA-69fq-xp46-6x23
+      # Safe version: setup-trivy v0.2.6 (SHA 3fb12ec verified post-incident).
+      - name: Install Trivy
+        uses: aquasecurity/setup-trivy@3fb12ec12f41e471780db15c232d5dd185dcb514
+        with:
+          version: v0.72.0
+
+      - name: Scan images for CRITICAL vulnerabilities
+        shell: bash
+        run: |
+          REGISTRY="quay.io/rh-ai-quickstart"
+          IMAGES=$(docker images --filter "reference=${REGISTRY}/*" --format "{{.Repository}}:{{.Tag}}")
+          FAILED=0
+          for img in $IMAGES; do
+            echo "🔍 Scanning ${img}..."
+            if trivy image --exit-code 1 --severity CRITICAL --no-progress "${img}"; then
+              echo "  ✅ ${img} - no critical vulnerabilities"
+            else
+              echo "  ⚠️  ${img} - critical vulnerabilities found"
+              FAILED=1
+            fi
+            echo ""
+          done
+          if [ $FAILED -ne 0 ]; then
+            echo "❌ Security scan found critical vulnerabilities"
+            exit 1
+          fi
+          echo "✅ All images pass security scan (no CRITICAL vulnerabilities)"
+
+  image-deploy-test:
+    name: Pull, deploy & verify with helm-install-test
+    runs-on: ubuntu-latest
+    needs: pull-images
+    steps:
+      - name: Validate LLM_API_TOKEN_INFERENCE secret
+        shell: bash
+        env:
+          LLM_API_TOKEN: ${{ secrets.LLM_API_TOKEN_INFERENCE }}
+        run: |
+          if [ -z "${LLM_API_TOKEN}" ]; then
+            echo "LLM_API_TOKEN_INFERENCE secret is missing or empty. Set it in repository or organization secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || 'dev' }}
+          submodules: recursive
+
+      - name: Prepare Runner
+        uses: ./it-self-service-agent/.github/actions/prepare-runner
+        with:
+          swap-storage: 'false'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Local Dependencies
+        shell: bash
+        working-directory: it-self-service-agent
+        run: |
+          make oc
+          echo "$GITHUB_WORKSPACE/it-self-service-agent/bin" >> $GITHUB_PATH
+
+      - name: Install Kind
+        shell: bash
+        run: go install sigs.k8s.io/kind@v0.30.0
+
+      - name: Create Kind cluster with local registry
+        shell: bash
+        working-directory: it-self-service-agent
+        run: bash ./scripts/ci/kind-with-registry.sh
+
+      - name: Helm Depend
+        shell: bash
+        run: make helm-depend
+
+      - name: Pull images from registry
+        shell: bash
+        run: |
+          make pull-all-images
+
+      - name: Determine image version
+        id: version
+        shell: bash
+        working-directory: it-self-service-agent
+        run: |
+          BASE=$(grep '^BASE_VERSION :=' Makefile | awk '{print $3}')
+          VERSION="${BASE}-dev"
+          echo "tag=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Using image version: ${VERSION}"
+
+      - name: Retag images for local Kind registry
+        shell: bash
+        run: |
+          make retag-all-images NEW_REGISTRY=localhost:5001 NEW_VERSION=${{ steps.version.outputs.tag }}
+
+      - name: Push images to local Kind registry
+        shell: bash
+        run: |
+          make push-all-images REGISTRY=localhost:5001 VERSION=${{ steps.version.outputs.tag }}
+
+      - name: Create namespace
+        shell: bash
+        run: make namespace NAMESPACE=${{ env.E2E_NAMESPACE }}
+
+      - name: Validate namespace exists
+        shell: bash
+        run: |
+          if ! kubectl get namespace ${{ env.E2E_NAMESPACE }}; then
+            echo "Error: Namespace ${{ env.E2E_NAMESPACE }} does not exist"
+            exit 1
+          fi
+
+      - name: Helm Install (using pulled images)
+        shell: bash
+        run: |
+          make helm-install-test \
+            NAMESPACE=${{ env.E2E_NAMESPACE }} \
+            REGISTRY=localhost:5001 \
+            VERSION=${{ steps.version.outputs.tag }} \
+            LLM=${{ vars.LLM_INFERENCE }} \
+            LLM_ID=${{ vars.LLM_ID_INFERENCE }} \
+            LLM_URL=${{ vars.LLM_URL_INFERENCE }} \
+            LLM_API_TOKEN=$LLM_API_TOKEN \
+            EXTRA_HELM_ARGS="--set requestManagement.networkPolicies.platform=kind --set requestManagement.requestManager.externalAccess.enabled=false --set requestManagement.integrationDispatcher.externalAccess.enabled=false"
+        env:
+          LLM_API_TOKEN: ${{ secrets.LLM_API_TOKEN_INFERENCE }}
+
+      - name: Set default namespace on Kind
+        shell: bash
+        run: |
+          kubectl config set-context --current --namespace=${{ env.E2E_NAMESPACE }}
+
+      - name: Verify all deployments are ready
+        shell: bash
+        run: |
+          echo "Waiting for all deployments to be ready..."
+          kubectl wait --for=condition=available deployment --all -n ${{ env.E2E_NAMESPACE }} --timeout=300s
+          echo "✅ All deployments are available"
+          echo ""
+          echo "--- Deployment status ---"
+          kubectl get deployments -n ${{ env.E2E_NAMESPACE }}
+          echo ""
+          echo "--- Pod status ---"
+          kubectl get pods -n ${{ env.E2E_NAMESPACE }}
+
+      - name: Verify expected deployments exist
+        shell: bash
+        run: |
+          echo "--- All deployments in namespace ---"
+          kubectl get deployments -n ${{ env.E2E_NAMESPACE }} -o custom-columns=NAME:.metadata.name,READY:.status.readyReplicas,AVAILABLE:.status.availableReplicas
+          echo ""
+          CHART_NAME="self-service-agent"
+          MISSING=()
+          for dep in "request-manager" "agent-service" "integration-dispatcher" "mock-eventing" "mock-servicenow"; do
+            if ! kubectl get deployment "${CHART_NAME}-${dep}" -n ${{ env.E2E_NAMESPACE }} &>/dev/null; then
+              MISSING+=("${CHART_NAME}-${dep}")
+            fi
+          done
+          if ! kubectl get deployment "mcp-self-service-agent-snow" -n ${{ env.E2E_NAMESPACE }} &>/dev/null; then
+            MISSING+=("mcp-self-service-agent-snow")
+          fi
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "❌ Missing expected deployments: ${MISSING[*]}"
+            exit 1
+          fi
+          echo "✅ All expected deployments are present and available"
+
+      - name: Run short integration test
+        shell: bash
+        run: |
+          make test-short-resp-integration-request-mgr
+        env:
+          LLM_URL: ${{ vars.LLM_URL_INFERENCE }}
+          LLM_API_TOKEN: ${{ secrets.LLM_API_TOKEN_INFERENCE }}
+
+      - name: Inspect Cluster - Self-Service Agent
+        if: failure()
+        uses: ./it-self-service-agent/.github/actions/inspect
+        with:
+          artifactPrefix: self-service-agent-image-deploy-test-dev
+
+      - name: Create evaluations tarball
+        if: always()
+        shell: bash
+        run: |
+          if [ -d "it-self-service-agent/evaluations/results" ]; then
+            tar -czf evaluations-results-image-deploy-test-dev-${{ github.run_id }}.tar.gz -C it-self-service-agent/evaluations results/
+            echo "Tarball created successfully from it-self-service-agent/evaluations/results/"
+            ls -lh evaluations-results-image-deploy-test-dev-${{ github.run_id }}.tar.gz
+          else
+            echo "evaluations/results directory not found, creating empty marker"
+            mkdir -p it-self-service-agent/evaluations/results
+            echo "No evaluation results were generated" > it-self-service-agent/evaluations/results/README.txt
+            tar -czf evaluations-results-image-deploy-test-dev-${{ github.run_id }}.tar.gz -C it-self-service-agent/evaluations results/
+          fi
+
+      - name: Upload evaluations artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluations-results-image-deploy-test-dev-${{ github.run_id }}
+          path: evaluations-results-image-deploy-test-dev-${{ github.run_id }}.tar.gz
+          retention-days: 30
+          if-no-files-found: warn
