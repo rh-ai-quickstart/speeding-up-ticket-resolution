@@ -37,11 +37,22 @@ jobs:
         run: |
           make pull-all-images
 
-      - name: List pulled images
+      - name: Verify all 9 images were pulled
         shell: bash
         run: |
+          REGISTRY="quay.io/rh-ai-quickstart"
           echo "--- Pulled images ---"
-          docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+          docker images --filter "reference=${REGISTRY}/*" --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+          echo ""
+          COUNT=$(docker images --filter "reference=${REGISTRY}/*" --format "{{.Repository}}" | wc -l)
+          EXPECTED=9
+          if [ "$COUNT" -ne "$EXPECTED" ]; then
+            echo "❌ Expected ${EXPECTED} images, but found ${COUNT}"
+            echo "Missing images:"
+            docker images --filter "reference=${REGISTRY}/*" --format "{{.Repository}}" | sort
+            exit 1
+          fi
+          echo "✅ All ${EXPECTED} images pulled successfully"
 
   image-security-scan:
     name: Security scan images (Trivy)
@@ -88,6 +99,50 @@ jobs:
             exit 1
           fi
           echo "✅ All images pass security scan (no CRITICAL vulnerabilities)"
+
+  sbom-generation:
+    name: Generate SBOMs (Syft)
+    runs-on: ubuntu-latest
+    needs: pull-images
+    continue-on-error: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || '' }}
+          submodules: recursive
+
+      - name: Pull all images
+        shell: bash
+        run: |
+          make pull-all-images
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Generate SBOMs for all images
+        shell: bash
+        run: |
+          REGISTRY="quay.io/rh-ai-quickstart"
+          mkdir -p sbom-output
+          IMAGES=$(docker images --filter "reference=${REGISTRY}/*" --format "{{.Repository}}:{{.Tag}}")
+          for img in $IMAGES; do
+            SAFE_NAME=$(echo "${img}" | sed 's|[/:]|-|g')
+            echo "Generating SBOM for ${img}..."
+            syft "${img}" -o cyclonedx-json="sbom-output/${SAFE_NAME}.cdx.json"
+            echo "  ✅ ${SAFE_NAME}.cdx.json"
+          done
+          echo ""
+          echo "--- Generated SBOMs ---"
+          ls -lh sbom-output/
+
+      - name: Upload SBOMs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx-main-${{ github.run_id }}
+          path: sbom-output/
+          retention-days: 30
+          if-no-files-found: warn
 
   image-deploy-test:
     name: Pull, deploy & verify with helm-install-test
@@ -231,6 +286,37 @@ jobs:
             exit 1
           fi
           echo "✅ All expected deployments are present and available"
+
+      - name: Verify detailed health (DB + integration handlers)
+        shell: bash
+        run: |
+          CHART_NAME="self-service-agent"
+          SERVICES=("request-manager" "agent-service" "integration-dispatcher")
+          FAILED=0
+          for svc in "${SERVICES[@]}"; do
+            DEPLOY="${CHART_NAME}-${svc}"
+            echo "Checking /health/detailed on ${DEPLOY}..."
+            RESPONSE=$(kubectl exec deploy/${DEPLOY} -n ${{ env.E2E_NAMESPACE }} -- \
+              curl -sf http://localhost:8080/health/detailed 2>&1) || {
+                echo "  ❌ ${DEPLOY} - /health/detailed request failed"
+                FAILED=1
+                continue
+              }
+            echo "  ${RESPONSE}"
+            STATUS=$(echo "${RESPONSE}" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "parse_error")
+            if [ "${STATUS}" != "healthy" ]; then
+              echo "  ❌ ${DEPLOY} - status is '${STATUS}', expected 'healthy'"
+              FAILED=1
+            else
+              echo "  ✅ ${DEPLOY} - healthy (DB + integrations OK)"
+            fi
+            echo ""
+          done
+          if [ $FAILED -ne 0 ]; then
+            echo "❌ Detailed health check failed"
+            exit 1
+          fi
+          echo "✅ All core services pass detailed health check"
 
       - name: Run short integration test
         shell: bash
