@@ -108,6 +108,16 @@ undeploy-nemo-guardrails:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
 	$(MAKE) -C $(SUBMODULE) undeploy-nemo-guardrails
 
+.PHONY: helm-install-test
+helm-install-test:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) helm-install-test $(VERSION_ARG)
+
+.PHONY: test-short-resp-integration-request-mgr
+test-short-resp-integration-request-mgr:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) test-short-resp-integration-request-mgr
+
 .PHONY: build-all-images
 build-all-images:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
@@ -117,3 +127,13 @@ build-all-images:
 push-all-images:
 	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
 	$(MAKE) -C $(SUBMODULE) push-all-images $(VERSION_ARG)
+
+.PHONY: pull-all-images
+pull-all-images:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) pull-all-images $(VERSION_ARG)
+
+.PHONY: retag-all-images
+retag-all-images:
+	@test -f $(SUBMODULE)/Makefile || { echo "error: submodule missing; run: git submodule update --init --recursive"; exit 1; }
+	$(MAKE) -C $(SUBMODULE) retag-all-images $(VERSION_ARG)
